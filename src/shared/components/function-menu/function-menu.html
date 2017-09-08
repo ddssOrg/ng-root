@@ -1,0 +1,28 @@
+<div class="new_function_menu">
+  <!-- ng-init="initDrag()" -->
+  <div class="function_menu_list">
+    <div ng-repeat="uibutton in uimodule.toolbar.buttons" class="menu_list" ng-if="!(uibutton.action=='ztpj'&&isIe())">
+      <div class="function_icon" ng-class="{'function_icon_bg2':'info'==uibutton.style,
+      'function_icon_bg1':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+      'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-hotkey="regHotKey(uibutton)" ng-mouseenter="ui.index = $index"
+        ng-mouseleave="ui.index = -1" ng-click="exeCommand(uibutton)" ng-style="{'border-radius':$index==0?'10px 0px 0px 0px':'0px 0px 0px 0px'}">
+        <a><i class="{{uibutton.icon}}"></i></a>
+      </div>
+      <a ng-if="$index==ui.index" ng-click="exeCommand(uibutton)" class="function_detail" ng-class="{'function_bg2':'info'==uibutton.style,
+      'function_bg1':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+      'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-href="{{uibutton.type=='linkbutton'?uibutton.href:'javascript:;'}}">{{uibutton.label}}</a>
+    </div>
+  </div>
+  <div style="height:35px">
+    <a ng-mouseenter="isshow = true" ng-mouseleave="isshow = false" class="function_menu_click_close function_click_icon" style="border-radius: 0px 0px 0px 0px;background: #c0c0c0;width:35px"
+      ng-click="slideToggle()">
+            <i class="font-awesome-icon icon-removes"></i>
+      </a>
+    <a id="close" ng-if="isshow" class="function_detail" style="color:#fff;float:right;background: rgb(85, 92, 120);">收放</a>
+  </div>
+  <div style="height:35px">
+    <a class="function_menu_click_move" style="border-radius: 0px 0px 0px 10px;width:35px;background: #c0c0c0">
+            <i class="font-awesome-icon icon-move"></i>
+      </a>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<table id="table_float_table_head_{{uitab.id}}" ng-controller="fxTableHeaderController"
+  class="table_new_style table table-new-border" 
+  style="table-layout: fixed; margin-bottom: 0;border-bottom:0px;"
+  ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+  <thead>
+    <tr ng-repeat="uiheadrow in uitab.table.thead.headRows">
+      <th ng-repeat="uiheadcell in uiheadrow.headCells" 
+        ng-hide="uiheadcell.hide" ng-attr-rowspan="{{uiheadcell.rowspan}}" ng-attr-colspan="{{uiheadcell.colspan}}"
+        ng-class="{dropdown: uiheadcell.dataType == 'text'&&!uiheadcell.editmodle}"
+        ng-style="{'width':uiheadcell.width+'%', 'color': uiheadcell.color?uiheadcell.color:'#999999'}" style="cursor: default;">
+
+        <input type="checkbox" style="margin-left: 6px;" ng-if="uiheadcell.dataType=='allcheckbox'" ng-model="uiheadcell.checked" ng-click="checkedAll(uiheadcell.checkedProperty,uitab,uiheadcell.checked);">
+
+        <span ng-if="(uiheadcell.dataType != 'text')||(uiheadcell.dataType == 'text'&&!uiheadcell.editmodle)" 
+          ng-dblclick="uiheadcell.editmodle=!uiheadcell.editmodle;editModleOn(uiheadcell.property+$index, uiheadcell);">
+            {{uiheadcell.value}}{{uiheadcell.unit}}
+        </span>
+        <i ng-if="uiheadcell.icon" class="{{uiheadcell.icon}}"></i>
+        <i ng-if="uiheadcell.dataType == 'text'&&!uiheadcell.editmodle" class="bjdtl" data-toggle="dropdown">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+        <ul class="dropdown-menu" role="menu" ng-if="uiheadcell.dataType == 'text'&&!uiheadcell.editmodle">
+          <li>
+            <a ng-click="addColumn(uiheadcell, uitab.table, $index);">插入一列</a>
+          </li>
+          <li ng-if="countDynamic(uiheadrow.headCells)>1">
+            <a ng-click="delColumn(uiheadcell, uitab.table, $index);">删除该列</a>
+          </li>
+          <li>
+            <a ng-click="editColumn(uiheadcell,$event,$index);">编辑列名</a>
+          </li>
+        </ul>
+        <input id="{{uiheadcell.property+$index}}" ng-if="uiheadcell.dataType == 'text'&&uiheadcell.editmodle" ng-model="uiheadcell.value"
+          style="border: 1px solid #efefef; width: 90%; height: 90%;" 
+          ng-focus="editModleOn(uiheadcell.property+$index, uiheadcell);"
+          onchange="window.changeflag=true;window.closeFlag = true;" 
+          ng-blur="editModleOff(uiheadcell.property+$index, uiheadcell, uiheadrow.headCells);"
+          ng-keyup="editmoduleKeyup(uiheadcell.property+$index, uiheadcell, uiheadrow.headCells, $event);"
+        />
+      </th>
+    </tr>
+  </thead>
+</table>

@@ -1,0 +1,95 @@
+<div>
+  <div style="padding-top: 4px;background:#e5e5e5;color:#232325;font-family: Microsoft YaHei;font-size: 14px;height: 35px;line-height: 25px;padding-left: 14px;">
+    <div style="padding-left: 15px;padding-right: 13px;border-left: 2px solid #fccd32;height: 27px">附件选择列表
+      <span class="btn-group" style="text-align: left;float:right;" ng-if="uitab.footerbar">
+						<button
+							ng-if="uibutton.action=='addFile'||(uibutton.action=='delFile' && hasSelectedFjlbRow(uitab))"
+							ng-repeat="uibutton in uitab.footerbar.buttons" class="btn btn-xs"
+							ng-class="{'btn-info':'info'==uibutton.style,
+						'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+						'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}"
+							ng-click="exeCommand(uibutton,uitab)">
+							<div class="{{uibutton.icon}}"></div><span style="color: #232325;">{{uibutton.label}}</span>
+      </button>
+      <button style="padding-bottom: 7px;height:30px" ng-if="uibutton.action=='delFile'&&!hasSelectedFjlbRow(uitab)" ng-repeat="uibutton in uitab.footerbar.buttons"
+        class="btn btn-xs" ng-class="{'btn-info':'info'==uibutton.style,
+								'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+								'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton.action,uitab)">
+							<div class="{{uibutton.icon}}"></div>{{uibutton.label}}
+						</button>
+      <button style="padding-bottom: 7px;height:27px" ng-if="uibutton.action=='chart'" ng-repeat="uibutton in uitab.footerbar.buttons"
+        class="btn btn-xs" ng-class="{'btn-info':'info'==uibutton.style,
+							'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+							'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton,uitab)">
+								<div class="{{uibutton.icon}}"></div><span style="color: #232325;">{{uibutton.label}}</span>
+							</button>
+      <button style="padding-bottom: 7px;height:27px" ng-if="uibutton.action=='add'||(uibutton.action=='delete'&&hasSelectedRow(uitab))||uibutton.action=='editmb'"
+        ng-repeat="uibutton in uitab.footerbar.buttons" class="btn btn-xs" ng-class="{'btn-info':'info'==uibutton.style,
+									'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+									'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton,uitab)">
+								<div class="{{uibutton.icon}}"></div><span style="color: #232325;">{{uibutton.label}}</span>
+							</button>
+      <button style="padding-bottom: 7px;height:30px" ng-if="uibutton.action=='delete'&&!hasSelectedRow(uitab)" ng-repeat="uibutton in uitab.footerbar.buttons"
+        class="btn btn-xs" ng-class="{'btn-info':'info'==uibutton.style,
+									'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+									'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton,uitab)">
+								<div class="{{uibutton.icon}}"></div>{{uibutton.label}}
+							</button>
+      </span>
+    </div>
+  </div>
+  <table width="100%" class="table_new_style table table-new-border" ng-if="uitab.subTable" style="table-layout: fixed;margin-bottom: 10px;">
+    <thead>
+      <tr ng-repeat="uiheadrow in uitab.subTable.thead.headRows" style="height: 18px;">
+        <th ng-repeat="uiheadcell in uiheadrow.headCells" rowspan="{{uiheadcell.rowspan}}" colspan="{{uiheadcell.colspan}}" width="{{uiheadcell.width}}%">
+          {{uiheadcell.value}}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="uirow in uitab.subTable.tbody.rows" style="height: 18px;" ng-click="uirow.checked=!uirow.checked">
+        <!-- style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;"  -->
+        <td ng-class="{'nowrap':uicell.nowrap}" style="overflow: hidden; text-overflow: ellipsis; max-width: 100px; white-space: nowrap;"
+          title="{{uicell.dataType=='label'||uicell.dataType=='textarea'?uicell.value:''}}" ng-repeat="uicell in uirow.cells"
+          ng-hide="uicell.hide" ng-style="{'text-align':uicell.align}" rowspan="{{uicell.rowspan}}">
+          <input type="checkbox" ng-if="uicell.dataType=='checkbox'" ng-checked="uirow.checked">
+          <!-- <div class="checkbox" ng-if="uicell.dataType=='checkbox'">
+									<label> 
+										<input type="checkbox" ng-checked="uicell.checked">{{uicell.label}}
+									</label>
+								</div>  -->
+          <select style="width: 100%;" ng-if="uicell.dataType=='select'&&!uirow.id" ng-model="uicell.value" ng-options="option.value as option.name for option in uicell.options">
+							</select>
+          <span ng-if="uicell.dataType=='select'&&uirow.id" ng-repeat="option in uicell.options|filter:uicell.value">{{option.name}}</span>
+          <span ng-if="uicell.dataType=='label'">{{uicell.value}}</span>
+          <a ng-href="/download.sword?ctrl=DemoCtrl_downloadallfile&mbpath={{uicell.value}}{{getAuditParams()}}" ng-if="uicell.dataType=='href'&&uicell.value"
+            target="_blank">{{uicell.label}}</a>
+          <input ng-if="uicell.dataType=='text'" style="width:100%;" type="text" ng-model="uicell.value" ng-paste-text ng-paste-cell="uicell"
+            ng-paste-row="uirow" ng-paste-table="uitab.table.tbody" ng-paste-tab="uitab" ng-attr-id="{{uitab.id+'_'+uirow.rowIndex+'_'+uicell.colIndex}}"
+          />
+          <!-- ng-click="editTextArea(uicell.value)" -->
+          <div ng-if="uicell.dataType=='textarea'" ng-paste-text ng-paste-cell="uicell" ng-paste-row="uirow" ng-paste-table="uitab.table.tbody"
+            ng-paste-tab="uitab" ng-attr-id="{{uitab.id+'_'+uirow.rowIndex+'_'+uicell.colIndex}}">
+            <div style="float: right;width:30px;">
+              <a class="btn btn-xs btn-warning" ng-click="editTextArea(uicell)" href="javascript:;"><i class="primary icon-zoom-in"></i></a>
+            </div>
+            <div style="width: auto;margin:3px 33px 3px 0px">
+              <textarea style="width:100%;height:28px;resize: none;overflow: hidden; " ng-model="uicell.value"></textarea>
+            </div>
+          </div>
+          <div ng-if="uicell.dataType=='upload'&&uirow.id">
+            <a href="javascript:;" ng-fileupload-url="{{uicell.uploadUrl}}" ng-fileupload-param='{"xmid":"{{xmid}}","cjmxdm":"{{uirow.id}}"}'
+              ng-fileupload-model='uicell.value' ng-fileupload>上传</a>
+            <a ng-show="uicell.value" href="javascript:;" ng-click="viewFile(uirow.id)">查看</a>
+            <a ng-show="uicell.value" href="javascript:;" ng-click="delFile(uirow.id,uicell)">删除</a>
+          </div>
+          <div ng-if="uicell.dataType=='fileselect'">
+            <a href="javascript:;" ng-click="fileSelect(uirow.id)">获取</a>
+            <a ng-show="uicell.value" href="javascript:;" ng-click="viewFile(uirow.id)">查看</a>
+          </div>
+          <a ng-if="uicell.dataType=='fileview'" href="javascript:;" ng-click="viewOneFile(uirow.id)">查看</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

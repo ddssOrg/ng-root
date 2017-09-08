@@ -1,0 +1,61 @@
+<div class="fx">
+  <!--loading-->
+  <div class="load">
+    <div class="line-scale">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+  <!--loading-->
+
+  <!-- 快捷键保存时，用于获得焦点 -->
+  <input id="hidden_focus_hotKey" type="text" style="height:0px;size:0px" />
+  <function-menu ng-if="!((uibutton.action=='ztpj'||uibutton.action=='xmjzfx')&&isIe())"></function-menu>
+  <!-- <span id="prompt" style="color:#2e8965;float: left;max-width: 600px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;line-height: 31px;margin-left: 10px;font-size: 1.17em;">
+		{{uimodule.defaultPrompt}}
+	</span> -->
+  <div class="success_tips">
+    <span id="prompt">{{uimodule.defaultPrompt}}</span>
+    <i class="icon-remove success_tips_close" onclick="$(this).parent().hide(300)"></i>
+  </div>
+  <div class="ljw_table_date" ng-if="uimodule.queryYearList" ng-init="uimodule.showYearList=false" ng-show="uimodule.showYearList">
+    <div class="ljw_table_date_line">
+      <div class="ljw_table_date_year">
+        <span>资料属期：</span>
+      </div>
+      <div class="ljw_table_date_detail">
+        <div class="ljw_table_date_datail_up">
+          <span ng-class="{'ljw_table_date_choice':checkedTime==time,'ljw_table_date_un_choice':checkedTime!=time}" ng-repeat="time in times"
+            ng-click="selectedTime(time)">{{time}}
+                		<span style="align: center;margin:0px 0px 0px 5px;"
+						class="icon-remove" ng-click="deleteSqData(time)"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="position: relative; top:10px;">
+    <module-tabs></module-tabs>
+    <div id="content" ng-style="{'top': (anchorPointHeight(uimodule)-35) +'px'}">
+      <div id="{{uitab.id}}" class="sample-show-hide section-content xsj xsj1" ng-repeat="uitab in uimodule.tabs" ng-style="{'padding-top': anchorPointHeight(uimodule) +'px','margin-top': -1*anchorPointHeight(uimodule) +'px'}"
+        ng-show="(uitab.title=='综合分析意见'&&uimodule.tabActiveIndex==$index)||(uitab.title!='综合分析意见'&&uimodule.tabs[uimodule.tabActiveIndex].title!='综合分析意见')">
+        <iframe style="width: 100%; border: 1px solid #ddd; margin-top: -43px;" ng-style="{'height':getPageOfficeHeight()+'px'}"
+          frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" ng-src="{{uitab.iframeSrc}}"
+          ng-if="uitab.type=='iframe' && uimodule.tabActiveIndex==$index || uitab.showed" ng-init="uitab.showed=true"></iframe>
+        <fx-table-date ng-if="uitab.table.filterProperty&&uitab.type=='table'"></fx-table-date>
+        <!-- table start -->
+        <fx-tab-head ng-if="uitab.title!='综合分析意见'"></fx-tab-head>
+        <fx-main-table-panel ng-if="uitab.type=='table'"></fx-main-table-panel>
+        <!-- 图表-->
+        <iframe style="width: 100%;border:1px solid #ddd;margin-top: 10px;height:{{uitab.chart.height}}px;" frameborder="no" border="0"
+          marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" ng-if="uitab.chart" ng-show="uitab.chart.show"
+          ng-src="{{uitab.chart.show?uitab.chart.url:''}}"></iframe>
+        <fx-sub-table ng-if="uitab.subTable"></fx-sub-table>
+      </div>
+    </div>
+  </div>
+  <fx-spinner ng-show="loading"></fx-spinner>
+</div>

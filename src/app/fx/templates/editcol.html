@@ -1,0 +1,22 @@
+<div class="modal-content" style="height:100%">
+  <div class="modal-header">
+    <a href="javascript:;" class="close" ng-click="closeThisDialog(1)">&times;</a>
+    <h4 class="modal-title">编辑动态列</h4>
+  </div>
+  <div class="modal-body">
+    <div>{{description}}</div>
+    <div style="margin-top: 10px;margin-bottom: 10px;max-height:150px;overflow-y: auto;">
+      <div ng-repeat="head in editHeads" ng-hide="head.isdel" style="margin-top: 5px; margin-bottom: 5px;">
+        <input type="text" ng-style="checkRequired(head)" ng-disabled="head.oldValue" placeholder="请输入{{head.propertyName}}" style="border:1px solid #dddddd;width: 250px;"
+          ng-model="head.value">
+        <span>{{head.unit}}</span>
+        <button class="btn btn-xs btn-danger" ng-disabled="!candel()" ng-click="del($index)">删除</button>
+      </div>
+    </div>
+    <button class="btn btn-xs btn-info" ng-click="add()">添加</button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-info" ng-click="ok()">确定</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="closeThisDialog(1)">返回</button>
+  </div>
+</div>

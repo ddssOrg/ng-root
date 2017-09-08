@@ -1,0 +1,99 @@
+<div id="main_table_panel_{{::uitab.id}}" 
+  class="table-frame fx-main-table-panel" 
+  ng-head-float="{{uitab.id}}"
+  scroll-header-title-id="app/fx/components/tab-head/tab-head.html"
+  float-table-head="app/fx/components/main-table-panel/components/table-head/table-head.html"
+  style="overflow-x: auto; width: 100%;">
+  <!-- 表头 start -->
+  <div id="float_bar_top" ng-if="$index==0" class="nav-height" style="position:fixed;width:97%;top:0px;z-index:99">
+    <nav id="nav-box" class="nav-box">
+      <ul class="clearfix" style="width: 45%;float: left;">
+        <li ng-repeat="uitab in uimodule.tabs" ng-if="uitab.title!='综合分析意见'">
+          <a class="md-tab" 
+            ng-class="{'active':ui.tabIndex==$index,'md-tab-right':uitab.title!='综合分析意见'}" 
+            ng-click="ui.tabIndex=$index;"
+            app-archor="{{uitab.id}}">
+              {{uitab.title}}
+          </a>
+        </li>
+      </ul>
+
+      <div style="margin-top: 7px;width: 10%;padding-right: 10px;display:inline-block;">
+        <span id="showTypeSpan" style="float:right;"></span>
+      </div>
+
+      <div style="float:right;margin-top: 7px;width: 45%;padding-left: 10px;border-left: 1px solid #fccd32;">
+        <div id="myDiv" ng-if="uimodule.label.show" style="cursor: default;">
+          <div style="height: 100%;float: left;">
+            <span>{{uimodule.label.name}}:</span>
+            <img id="addsqsrk" style="width: 18px; margin-top: -3px; cursor: pointer;" src="/css/css/images/icon_riqi.png" ng-click="addsqsrk()"
+            />
+            <div id="ymbox" class="ym-box" style="display: none;z-index: 5;">
+              <div id="ymbox_year" class="year">
+                <i id="ymbox_year_sub" class="icon-angle-left left"></i>
+                <span id="ymbox_year_center" class="center"></span>
+                <i id="ymbox_year_add" class="icon-angle-right right"></i>
+              </div>
+              <div id="ymbox_month" class="month">
+                <span month="01">一月</span><span month="02">二月</span><span month="03">三月</span> <span month="04">四月</span>
+                <span month="05">五月</span><span month="06">六月</span> <span month="07">七月</span><span month="08">八月</span>
+                <span month="09">九月</span> <span month="10">十月</span><span month="11">十一月</span><span month="12">十二月</span>
+              </div>
+            </div>
+          </div>
+          <div style="width: 78%;height: 100%;float: left;margin-left: 15px;">
+            <ul class="clearfix" style="width: 60%;float: left;width: 100%;float: left;margin-top: -6px;margin-left: -17px;padding-top: 0px;">
+              <li ng-repeat="time in times">
+                <a class="md-tab" style="font-size: 14px;" ng-class="{'active':checkedTime.substring(0, 7)==time}" ng-click="selectedTime(time);">
+                          {{time}}
+			                    <span style="align: center;margin:0px 0px 0px 5px;"
+															ng-if="time&&checkedTime.substring(0, 7)==time"
+                              class="icon-remove" ng-click="deleteSqData(time)">
+                          </span>
+                          <span ng-if="$index%4==3"><br/></span>
+                        </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <div id="table_float_table_head_div_{{uitab.id}}" ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+    <fx-table-head></fx-table-head>
+  </div>
+
+  <!-- 表头 end -->
+  <!-- 表格体 start -->
+  <div id="main_table_panel_body_{{uitab.id}}" class="main_table" ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}"
+    style="border-bottom: 1px solid #dddddd; overflow-y: hidden; overflow-x: hidden;">
+    <table id="main_table_{{uitab.id}}" ng-float-scroll="{{uitab.id}}" class="table_new_style table table-new-border" style="table-layout: fixed; margin-bottom: 0;"
+      ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+      <thead>
+        <tr ng-repeat="uiheadrow in uitab.table.thead.headRows" style="height:0px">
+          <th ng-repeat="uiheadcell in uiheadrow.headCells" ng-attr-rowspan="{{uiheadcell.rowspan}}" ng-attr-colspan="{{uiheadcell.colspan}}"
+            style="padding:0;border:0;" ng-style="{'width':uiheadcell.width+'%'}">
+          </th>
+        </tr>
+      </thead>
+      <tfoot>
+        <tr ng-if="uitab.table.sumRow" style="height:20px;color: #858585;">
+          <td style="padding: 10px 9px;font-size: 14px;" ng-repeat="col in uitab.table.columns" ng-hide="col.hide" ng-style="{'text-align':col.align}">
+            <span ng-if="$index==0">合计</span>
+            <span ng-if="$index!=0&&!col.sumCol">——</span>
+            <span ng-if="$index!=0&&col.sumCol">{{col.sum}}</span>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- <div ng-show="uitab.table.tbody.empty">
+    <table class="table_new_style table table-bordered" ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+      <tr>
+        <td style="text-align:center;" colspan="uirow.cells.length">所有空科目已被隐藏</td>
+      </tr>
+    </table>
+  </div> -->
+</div>

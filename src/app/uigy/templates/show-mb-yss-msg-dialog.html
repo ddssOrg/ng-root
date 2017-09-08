@@ -1,0 +1,55 @@
+<div class="modal-content" style="height:100%">
+  <div class="modal-header">
+    <a href="javascript:;" class="close" ng-click="closeThisDialog(1)">&times;</a>
+    <h4 class="modal-title">编辑原始数据</h4>
+  </div>
+  <div class="modal-body" style="max-height: 317px;overflow: hidden;">
+    <div ng-if="!tab.succ">{{tab.msg}}</div>
+    <div style="height: 35px; overflow-x: hidden; overflow-y: hidden; padding-right: 17px;">
+      <table ng-if="tab.succ" class="table table-striped table-new-border table-hover" width="100%" style="height: 35px; margin: 2px 0px 0px 0px; overflow-x: hidden; overflow-y: hidden;">
+        <tr>
+          <th style="text-align: center; width: 4%;">选择</th>
+          <th ng-repeat="title in tab.obj.titles" style="text-align: center;" ng-style="{'width': (title.width) + '%'}">{{title.name}}</th>
+        </tr>
+      </table>
+    </div>
+    <div style="max-height: 250px; overflow-x: hidden; overflow-y: auto;">
+      <table ng-if="tab.succ" class="table table-striped table-new-border table-hover" width="100%" style="height: 99% margin: 0px 0px 0px 0px; overflow-x: hidden; overflow-y: hidden;">
+        <tr style="display: none;">
+          <th style="text-align: center; width: 4%;">选择</th>
+          <th ng-repeat="title in tab.obj.titles" style="text-align: center;" ng-style="{'width': (title.width) + '%'}">{{title.name}}</th>
+        </tr>
+        <tr ng-repeat="data in tab.obj.datas" style="height: 35px;">
+          <td align="center" style="width: 4%;"><input type="checkbox" ng-model="data.checked" /></td>
+          <td ng-repeat="title in tab.obj.titles" ng-style="{'width': (title.width) + '%'}">
+            <input ng-if="title.type=='double'" ng-focus="toFix(data, title.key, 'put');" ng-blur="toFix(data, title.key, 'fix');" style="background-color:transparent;border:0px solid transparent;width: 100%; text-align: right;"
+              type="text" ng-model="data[title.key]" />
+            <input ng-if="title.type=='int'" ng-focus="toFix(data, title.key, 'put');" ng-blur="toFix(data, title.key, 'fix');" style="background-color:transparent;border:0px solid transparent;width: 100%; text-align: right;"
+              type="text" ng-model="data[title.key]" />
+            <input ng-if="title.type=='text'" style="background-color:transparent;border:0px solid transparent;width: 100%; text-align: left;"
+              type="text" ng-model="data[title.key]" />
+            <input ng-if="title.type=='date'" style="background-color:transparent;border:0px solid transparent;width: 100%; text-align: right;"
+              type="text" ng-model="data[title.key]" />
+            <select ng-if="title.type=='select'" style="background-color:transparent;border:0px solid transparent;width: 100%; text-align: right;direction: rtl;appearance:none;-moz-appearance:none;-webkit-appearance:none;"
+              ng-model="data[title.key]">
+						<option ng-repeat="option in title.options" value="{{option.value}}" >{{option.name}}</option>
+					</select>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div>
+      <span class="btn-group" style="text-align: left;">
+				<button class="btn btn-xs btn-info" ng-click="addRows();">
+					<i class="icon-plus"></i>添加</button>
+						<button class="btn btn-xs btn-danger" ng-click="delRows();">
+					<i class="icon-minus"></i>删除</button>
+			</span>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button ng-if="tab.succ" type="button" class="btn btn-sm btn-info" ng-click="save();">保存</button>
+    <button ng-if="!tab.succ" type="button" class="btn btn-sm btn-default" ng-click="alert('请先导入模版');">保存</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="closeThisDialog(1)">返回</button>
+  </div>
+</div>

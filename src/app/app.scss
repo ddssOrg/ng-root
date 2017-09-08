@@ -1,0 +1,45 @@
+.app {
+  
+}
+
+.ng-select-options {
+  display: none;
+  list-style: none;
+  margin: 0 0 0 -5px;
+  padding: 0;
+  position: absolute;
+  background-color: white;
+  z-index: 3;
+  border-left: 1px solid #dddddd;
+  border-right: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.ng-select-options>li {
+  margin: 0;
+  padding: 5px;
+  cursor: pointer;
+  /* border-top: 1px solid #dddddd; */
+}
+
+.ng-select-options>li:HOVER {
+  background-color: #dddddd;
+}
+
+*[contenteditable] {
+  outline: none;
+}
+
+.calculate-panel{
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 5px 5px;
+  min-width: 120px;
+  text-align: left;
+  box-shadow: 0 0 2px #000;
+  border-radius: 2px;
+  z-index: 10;
+}

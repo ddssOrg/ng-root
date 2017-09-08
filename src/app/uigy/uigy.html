@@ -1,0 +1,280 @@
+<div class="uigy">
+  <!-- 快捷键保存时，用于获得焦点 -->
+  <input id="hidden_focus_hotKey" type="text" style="height:0px;size:0px" />
+  <div class="qygxSearch" style="z-index:10;position:fixed" ng-init="initqygxSearch()"></div>
+  <div ng-if="uimodule.toolbar.buttons">
+    <function-menu></function-menu>
+  </div>
+  <div class="success_tips">
+    <span id="prompt">{{uimodule.defaultPrompt}}</span>
+    <i class="icon-remove success_tips_close" onclick="$(this).parent().hide(300)"></i>
+  </div>
+  <div class="ljw_table_date" ng-if="uimodule.queryYearList" ng-init="uimodule.showYearList=false" ng-show="uimodule.showYearList">
+    <div class="ljw_table_date_line">
+      <div class="ljw_table_date_year">
+        <span>资料属期：</span>
+      </div>
+      <div class="ljw_table_date_detail">
+        <div class="ljw_table_date_datail_up">
+          <span ng-class="{'ljw_table_date_choice':checkedTime.substring(0, 7)==time,'ljw_table_date_un_choice':checkedTime.substring(0, 7)!=time}"
+            ng-repeat="time in times" ng-click="selectedTime(time)">{{time}}
+						<span 
+						style="align: center;margin:0px 0px 0px 5px;"
+									class="icon-remove" ng-click="deleteSqData(time)"></span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="position: relative; top: 10px;">
+    <div class="l_project_tab1" style="position:fixed;margin: 0 auto 0 auto">
+      <ul id="tabs">
+        <li ng-repeat="uitab in uimodule.tabs" ng-if="($index<1||uitab.title=='综合分析意见')&&uimodule.tabs.length!=1&&(uitab.title!='综合分析意见'||isIe())"
+          ng-show="uitab.show || uitab.showTab" ng-class="{'current':uimodule.tabActiveIndex==$index}"><a href="javascript:;" ng-click="uimodule.tabActiveIndex=$index;">{{$index<1?'指标分析意见':'综合分析意见'}}</a>
+        </li>
+        <li ng-if="tabsTooLong" style="float:right;"><a href="javascript:;" ng-click="tabsRight()" style="padding: 0 5px;border-radius: 0 8px 0 0;display:none;"><i class="icon-chevron-right"></i></a></li>
+        <li ng-if="tabsTooLong" style="float:right;"><a href="javascript:;" ng-click="tabsLeft()" style="padding: 0 5px;border-radius: 8px 0 0 0;display:none;"><i class="icon-chevron-left"></i></a></li>
+      </ul>
+    </div>
+    <div id="content" ng-style="{'padding-left':(uimodule.tabs.length<2?0:35)+'px','top': anchorPointLineCount(uimodule)==0?'-30px':((anchorPointLineCount(uimodule)*32-19)+'px')}"
+      style="margin-bottom:28px;" ng-if="uimodule.tabActiveCjbgdm!='E1001'||isIe()">
+      <div id="{{uitab.id}}" class="sample-show-hide section-content xsj xsj1" ng-repeat="uitab in uimodule.tabs" ng-style="{'padding-top': (uitab.title=='综合分析意见'?0:anchorPointHeight(uimodule,uitab)) +'px','margin-top': (-1*anchorPointHeight(uimodule,uitab)) +'px'}"
+        ng-show="(uitab.title=='综合分析意见'&&uimodule.tabActiveIndex==$index)||(uitab.title!='综合分析意见'&&uimodule.tabs[uimodule.tabActiveIndex].title!='综合分析意见')">
+        <div ng-if="uitab.title!='综合分析意见'" style="background:#e5e5e5;color:#232325;padding-top: 4px;font-family:Microsoft YaHei;font-size:14px;height:35px;line-height: 25px;padding-left: 14px;">
+          <div style="padding-left: 15px;padding-right: 13px;border-left: 2px solid #fccd32;height: 27px">{{uitab.title}}<span class="btn-group" style="padding-left: 20px;border-left: 1px solid #fccd32;text-align: left;float:right;height:25px"
+              ng-if="uitab.footerbar&&uitab.type=='table'">
+								<button style = "padding-bottom: 7px;height:30px" 
+									ng-if="uibutton.action=='structure'"
+									ng-repeat="uibutton in uitab.footerbar.buttons" class="btn btn-xs"
+									ng-class="{'disabled':loading,'btn-info':'info'==uibutton.style,
+								'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+								'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}"
+									ng-click="exeCommand(uibutton,uitab)">
+									<div class="{{uibutton.icon}}"></div><span style="color: #232325;">{{uibutton.label}}</span>
+            </button>
+            <button style="padding-bottom: 7px;height:30px" ng-if="uibutton.action=='chart'" ng-repeat="uibutton in uitab.footerbar.buttons"
+              class="btn btn-xs" ng-class="{'disabled':loading,'btn-info':'info'==uibutton.style,
+								'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+								'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton,uitab)">
+									<div class="{{uibutton.icon}}"></div><span style="color: #232325;">{{uibutton.label}}</span>
+								</button>
+            <button style="padding-bottom: 7px;height:30px" ng-if="uibutton.action=='add'||(uibutton.action=='delete'&&hasSelectedRow(uitab))||uibutton.action=='editmb'||(uibutton.action=='editcol'&&uitab.id!='B0102-1'&&uitab.id!='B0102-2'&&uitab.id!='B0102-3'&&uitab.id!='B0102-4'&&uitab.id!='B0205-1')"
+              ng-repeat="uibutton in uitab.footerbar.buttons" class="btn btn-xs" ng-class="{'disabled':loading,'btn-info':'info'==uibutton.style,
+										'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+										'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton,uitab)">
+									<div class="{{uibutton.icon}}"></div><span style="color: #232325;">{{uibutton.label}}</span>
+								</button>
+            <button style="padding-bottom: 7px;height:30px" ng-if="uibutton.action=='delete'&&!hasSelectedRow(uitab)" ng-repeat="uibutton in uitab.footerbar.buttons"
+              class="btn btn-xs" ng-class="{'disabled':loading,'btn-info':'info'==uibutton.style,
+										'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+										'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton,uitab)">
+									<div class="{{uibutton.icon}}"></div>{{uibutton.label}}
+								</button>
+            </span>
+          </div>
+        </div>
+        <iframe id="iframe_{{uitab.id}}" class="iframe" style="width: 100%; border: 1px solid #ddd;" ng-style="{'height' : (uitab.title=='综合分析意见'&&isIe()?setPageOfficeHeight():uitab.iframeHeight) + 'px','margin-top': (uitab.title=='综合分析意见'?-43:0) +'px'}"
+          frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" ng-src="{{uitab.iframeSrc}}"
+          ng-if="(uitab.type=='iframe' && uimodule.tabActiveIndex==$index || uitab.showed) || uitab.showTab" ng-init="uitab.showed=true"></iframe>
+        <div class="ljw_table_date" ng-if="uitab.table.filterProperty&&uitab.type=='table'" style="position: inherit;">
+          <div class="ljw_table_date_line">
+            <div class="ljw_table_date_detail" style="width: 100%;">
+              <div class="ljw_table_date_datail_up">
+                <span ng-class="{'ljw_table_date_choice':uitab.table.filterChoose==filter,'ljw_table_date_un_choice':uitab.table.filterChoose!=filter}"
+                  ng-repeat="filter in uitab.table.filters" ng-if="filter"> <span
+									style="align: center;"
+									ng-click="selectedTableFilter(uitab.table,filter)">{{filter}}年</span> &nbsp;&nbsp;&nbsp; <span style="align: center;"
+                  class="icon-remove" ng-click="deleteYear(uitab,filter)"></span></span>
+                <span class="ljw_table_date_choice"> <span
+									style="align: center;"> <input id="createYear"
+										name="createYear" style="width: 75px;" placeholder="YYYY"
+										ng-keyup="createYear(uitab,'createYear',$event)"
+										ng-model="fxB0203_1.myCreateYear"
+										ng-init="uitab.showInput=false" ng-show="uitab.showInput" />
+								</span> <span style="align: center;" class="icon-plus" ng-click="uitab.showInput=!uitab.showInput"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="width: 100%; overflow-x: auto;" ng-if="uitab.type=='table'" id="navHeight">
+          <!-- ng-style="{'width':table.width?table.width}" -->
+          <div ng-if="($index==0&&uimodule.tabs.length>=2&&uimodule.tabs[1].title!='综合分析意见')||(uimodule.hasZlsq&&uimodule.label.show)"
+            class="nav-height" style="position:fixed;width:97%;top:0px;z-index:99;border-bottom: 1px solid #c5c4c4;">
+            <nav id="nav-box" class="nav-box">
+              <ul ng-if="(uimodule&&uimodule.tabs&&uimodule.tabs.length>=2&&uimodule.tabs[1].title!='综合分析意见')||(uimodule.hasZlsq&&uimodule.label.show)"
+                class="clearfix" style="float: left;" ng-style="{'width':uimodule.label.show?'60%':'100%'}">
+                <li ng-repeat="uitab in uimodule.tabs" ng-if="uitab.title!='综合分析意见'"><a class="md-tab" ng-class="{'active':ui.tabIndex==$index,'md-tab-right':uitab.title!='综合分析意见'}" ng-click="ui.tabIndex=$index;uimodule.tabActiveCjbgdm=uitab.id;activeTab($index);"
+                    href="#{{uitab.id}}">
+								    	{{uitab.title}}
+										</a></li>
+              </ul>
+              <div ng-if="uimodule.label.show" style="float:right;margin-top: 7px;width: 40%;padding-left: 10px;border-left: 1px solid #fccd32;">
+                <div id="myDiv" style="cursor: default;">
+                  <div style="height: 100%;float: left;">
+                    <span>{{uimodule.label.name}}:</span>
+                    <img id="addsqsrk" style="width: 18px; margin-top: -3px; cursor: pointer;" src="../css/css/images/icon_riqi.png" ng-click="addsqsrk()"></img>
+                    <div id="ymbox" class="ym-box" style="display: none;z-index: 5;">
+                      <div id="ymbox_year" class="year">
+                        <i id="ymbox_year_sub" class="icon-angle-left left"></i>
+                        <span id="ymbox_year_center" class="center"></span>
+                        <i id="ymbox_year_add" class="icon-angle-right right"></i>
+                      </div>
+                      <div id="ymbox_month" class="month">
+                        <span month="01">一月</span><span month="02">二月</span><span month="03">三月</span> <span month="04">四月</span>
+                        <span month="05">五月</span><span month="06">六月</span> <span month="07">七月</span><span month="08">八月</span>
+                        <span
+                          month="09">九月</span> <span month="10">十月</span><span month="11">十一月</span><span month="12">十二月</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="width: 78%;height: 100%;float: left;">
+                    <ul class="clearfix" style="width: 60%;float: left;width: 100%;float: left;margin-top: -6px;margin-left: -25px;padding-top: 0px;">
+                      <li ng-repeat="time in times">
+                        <a class="md-tab" style="font-size: 14px;" ng-class="{'active':checkedTime.substring(0, 7)==time}" ng-click="selectedTime(time);">{{time}}
+			                      						<span style="align: center;margin:0px 0px 0px 5px;"
+															ng-if="time&&checkedTime.substring(0, 7)==time"
+															class="icon-remove" ng-click="deleteSqData(time)"></span>
+														<span ng-if="$index%4==3"></br></span>
+			                      					</a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <div ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+            <table class="table_new_style table table-new-border" style="table-layout: fixed; margin-bottom: 0;border: 0px;" ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+              <thead>
+                <tr ng-repeat="uiheadrow in uitab.table.thead.headRows">
+                  <th ng-repeat="uiheadcell in uiheadrow.headCells" ng-hide="uiheadcell.hide" ng-attr-rowspan="{{uiheadcell.rowspan}}" ng-attr-colspan="{{uiheadcell.colspan}}"
+                    ng-style="{'width':uiheadcell.width+'%', 'color': uiheadcell.color?uiheadcell.color:'#999999'}" style="cursor: default;position:relative">
+                    <b ng-if="uiheadcell.required" class="icon-hert"></b>
+                    <span ng-if="(uiheadcell.dataType != 'text')||(uiheadcell.dataType == 'text'&&!uiheadcell.editmodle)" ng-dblclick="uiheadcell.editmodle=!uiheadcell.editmodle;editmodleOn(uiheadcell.property+$index, uiheadcell);">{{uiheadcell.value}}{{uiheadcell.unit}} </span>
+                    <i ng-if="uiheadcell.icon" class="{{uiheadcell.icon}}"></i>
+                    <i ng-if="uiheadcell.dataType == 'text'&&!uiheadcell.editmodle" class="bjdtl" data-toggle="dropdown">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
+                    <ul class="dropdown-menu" role="menu">
+                      <li style="margin-top:14px"><a ng-click="addcolumn(uiheadcell, uitab.table, $index);">插入一列</a></li>
+                      <li style="margin-top:0px" ng-if="countDynamic(uiheadrow.headCells)>1"><a ng-click="delcolumn(uiheadcell, uitab.table, $index);">删除该列</a></li>
+                      <li style="margin-top:3px;margin-bottom:3px" ng-if="countDynamic(uiheadrow.headCells)<=1"><span style="color: #efefef; margin-left:  -50px;">删除该列</span></li>
+                      <li><a ng-click="editcolumn(uiheadcell,$event,$index);">编辑列名</a></li>
+                    </ul>
+                    <input id="{{uiheadcell.property+$index}}" ng-if="uiheadcell.dataType == 'text'&&uiheadcell.editmodle" ng-model="uiheadcell.value"
+                      style="border: 1px solid #efefef; width: 90%; height: 100%;" ng-focus="editmodleOn(uiheadcell.property+$index, uiheadcell);"
+                      onchange="changeflag=true;window.changeflag=true;" ng-blur="editmodleOff(uiheadcell.property+$index, uiheadcell, uiheadrow.headCells);"
+                      ng-keyup="editmoduleKeyup(uiheadcell.property+$index, uiheadcell, uiheadrow.headCells, $event);" />
+                    <!-- ng-paste-text ng-paste-cell="uicell" ng-paste-row="uirow" ng-paste-table="uitab.table.tbody" ng-paste-tab="uitab" -->
+                  </th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <div id="main_table_panel_{{uitab.id}}" class="main_table" ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}"
+            style=" border-bottom: 1px solid #dddddd;  overflow-x: hidden;overflow-y:hidden !important;">
+            <table id="main_table_{{uitab.id}}" class="table_new_style table table-new-border" style="table-layout: fixed; margin-bottom: 0;"
+              ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+              <thead>
+                <tr ng-repeat="uiheadrow in uitab.table.thead.headRows" style="height:0px;">
+                  <th ng-repeat="uiheadcell in uiheadrow.headCells" ng-hide="uiheadcell.hide" ng-attr-rowspan="{{uiheadcell.rowspan}}" ng-attr-colspan="{{uiheadcell.colspan}}"
+                    style="padding:0;border:0;height:0px;" ng-style="{'width':uiheadcell.width+'%'}">
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-show="!(uirow.del||uirow.hide)" ng-repeat="uirow in uitab.table.tbody.rows | filter:uitab.table.filterChoose" ng-init="
+					                    $uirowData = uirow.data; 
+					                    $dataTable = uitab.table.tbody; 
+					                    $rowIndex = $index;
+					                    rowIndex = $index + 1;
+					                    $uitabID = uitab.id;">
+                  <td ng-repeat="uicell in uirow.cells" ng-init="
+					                      $labelProperty = uirowData[uicell.labelProperty]; 
+					                      $uploadUrl = uicell.uploadUrl;
+					                      $templateProperty = $uirowData[uicell.templateProperty];
+					                      $options = uicell.options;
+					                      colIndex = uicell.colIndex;
+					                    " ng-class="{'invalide':uicell.invalide}" ng-show="!uicell.hide" colspan="{{::uicell.colspan}}"
+                    rowspan="{{uicell.rowspan}}" ng-dblclick="editTextArea(uicell)" react-cell>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div ng-show="!uitab.table.tbody||!uitab.table.tbody.rows||uitab.table.tbody.rows.length<=0">
+            <table class="table_new_style table table-bordered" style="width:100%">
+              <tr>
+                <td style="text-align:center;" colspan="uirow.cells.length">没有数据</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- 图表-->
+        <iframe style="width: 100%; border: 1px solid #ddd; margin-top: 10px;" ng-style="{'height':uitab.chart.height+'px'}" ng-init="uitab.chart.show=false"
+          frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" ng-if="!uimodule.hasReport&&uitab.chart&&uitab.type=='table'"
+          ng-show="uitab.chart.show" ng-src="{{uitab.chart.show?uitab.chart.url:''}}"></iframe>
+
+        <div ng-repeat="func in uitab.funcs" style="width: 100%; border: 1px solid #ddd; margin-top: 10px;" style="width: 99%;" ng-init="uitab.chart.show=false"
+          frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" ng-if="uimodule.hasReport&&uitab.chart&&uitab.type=='table'"
+          ng-show="uitab.chart.show">
+          <div id="{{'linereport' + uitab.id + '-' + $index}}" style="width:1200px;height:500px;"></div>
+        </div>
+        <!-- 高管组织结构图 -->
+        <iframe id="structure" name="structure" style="width: 100%; border: 1px solid #ddd; margin-top: 10px;" ng-style="{'height':uitab.structure.height+'px'}"
+          ng-init="uitab.structure.show=false" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no"
+          allowtransparency="yes" ng-if="uitab.structure&&uitab.type=='table'" ng-show="uitab.structure.show" ng-src="{{uitab.structure.show?uitab.structure.url:''}}"></iframe>
+        <div ng-if="uitab.subTable" style="width:100%;background:#e5e5e5;color:#232325;padding-top: 4px;font-family:Microsoft YaHei;font-size:14px;height:35px;line-height: 25px;padding-left: 14px;">
+          <div style="padding-left: 15px;padding-right: 15px;border-left: 2px solid #fccd32;height: 27px">附件选择列表<span class="btn-group" style="padding-left: 20px;border-left: 1px solid #fccd32;text-align: left;float:right;height:25px"
+              ng-if="uitab.footerbar">
+						<button
+							ng-if="uibutton.action=='addFile'||(uibutton.action=='delFile' && hasSelectedFjlbRow(uitab))"
+							ng-repeat="uibutton in uitab.footerbar.buttons" class="btn btn-xs"
+							ng-class="{'disabled':loading,'btn-info':'info'==uibutton.style,
+						'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+						'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}"
+							ng-click="exeCommand(uibutton,uitab)">
+							<div class="{{uibutton.icon}}"></div><span style="color: #232325;">{{uibutton.label}}</span>
+            </button>
+            <button style="padding-bottom: 7px;height:30px" ng-if="uibutton.action=='delFile'&&!hasSelectedFjlbRow(uitab)" ng-repeat="uibutton in uitab.footerbar.buttons"
+              class="btn btn-xs" ng-class="{'disabled':loading,'btn-info':'info'==uibutton.style,
+								'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+								'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-click="exeCommand(uibutton.action,uitab)">
+							<div class="{{uibutton.icon}}"></div>{{uibutton.label}}
+						</button>
+            </span>
+          </div>
+        </div>
+        <table width="100%" class="table_new_style table table-new-border" ng-if="uitab.subTable" style="table-layout: fixed; margin-bottom: 0px; margin-top: 0px;">
+          <thead>
+            <tr ng-repeat="uiheadrow in uitab.subTable.thead.headRows">
+              <th ng-repeat="uiheadcell in uiheadrow.headCells" rowspan="{{uiheadcell.rowspan}}" colspan="{{uiheadcell.colspan}}" width="{{uiheadcell.width}}%">
+                {{uiheadcell.value}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="uirow in uitab.subTable.tbody.rows" style="height: 20px;" ng-init="$dataTable=uitab.subTable.tbody" ng-click="uirow.checked=!uirow.checked">
+              <td ng-class="::{'nowrap':uicell.nowrap}" style="overflow: hidden; text-overflow: ellipsis; max-width: 100px; white-space: nowrap;"
+                title="{{uicell.dataType=='label'||uicell.dataType=='textarea'?uicell.value:''}}" ng-repeat="uicell in uirow.cells"
+                ng-show="!(uicell.hide)" ng-style="::{'text-align':uicell.align}" rowspan="{{::uicell.rowspan}}" colspan="{{uicell.colspan}}"
+                ng-init="
+										colIndex = uicell.colIndex;
+									" ng-class="{'invalide':uicell.invalide}" react-cell></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="spinner" ng-if="loading">
+    <div class="rect1"></div>
+    <div class="rect2"></div>
+    <div class="rect3"></div>
+    <div class="rect4"></div>
+    <div class="rect5"></div>
+    <div class="rect6"></div>
+    <div class="rect7"></div>
+    <div class="rect8"></div>
+    <span>{{loadMsg}}</span>
+  </div>
+</div>

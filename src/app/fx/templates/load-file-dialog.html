@@ -1,0 +1,38 @@
+<div class="modal-content fx" style="height:100%">
+  <div class="modal-header">
+    <a href="javascript:;" class="close" ng-click="closeThisDialog(1)">&times;</a>
+    <h4 class="modal-title">附件列表</h4>
+  </div>
+  <div class="modal-body">
+    <table class="table table-striped table-new-border table-hover" width="100%">
+      <tr>
+        <th style="width: 45px; text-align: center;">选择</th>
+        <th style="width: 45px; text-align: center;">序号</th>
+        <th style="width: 300px; text-align: center;">文件名称</th>
+        <th style="width: 50px; text-align: center;">文件类型</th>
+        <th style="width: 150px; text-align: center;">文件描述</th>
+        <th style="width: 100px; text-align: center;">上传时间</th>
+        <th style="width: 100px; text-align: center;">文件提交人</th>
+        <th style="width: 91px; text-align: center;">文件提交时间</th>
+        <th style="width: 91px; text-align: center;">资料属期</th>
+        <th style="width: 60px; text-align: center;">是否已导入</th>
+      </tr>
+      <tr ng-repeat="file in files" ng-click="selectedFile(file.uuid)">
+        <td style="width: 50px; text-align: left;"><input type="checkbox" ng-checked="seluuid==file.uuid"></td>
+        <td style="width: 50px; text-align: left;">{{file.xh}}</td>
+        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;text-align: left;">{{file.filetitle}}</td>
+        <td style="width: 100px; text-align: left;">{{file.filetype}}</td>
+        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;text-align: left;">{{file.filecomment}}</td>
+        <td style="width: 100px; text-align: left;">{{file.lrrq|date:'yyyy-MM-dd'}}</td>
+        <td style="width: 150px; text-align: left;">{{file.wjtjr}}</td>
+        <td style="width: 100px; text-align: left;">{{file.wjtjsj}}</td>
+        <td style="width: 100px; text-align: left;">{{file.zlsq}}</td>
+        <td style="width: 50px; text-align: left;">{{file.sfydr}}</td>
+      </tr>
+    </table>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-sm btn-info" ng-click="loadFile()" ng-class="{'disabled':!seluuid}">导入</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="closeThisDialog(1)">返回</button>
+  </div>
+</div>

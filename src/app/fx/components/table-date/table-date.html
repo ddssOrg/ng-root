@@ -1,0 +1,22 @@
+<div class="ljw_table_date" style="position: inherit;">
+  <div class="ljw_table_date_line">
+    <div class="ljw_table_date_detail" style="width:100%;">
+      <div class="ljw_table_date_datail_up">
+        <span 
+          ng-class="{'ljw_table_date_choice':uitab.table.filterChoose==filter,'ljw_table_date_un_choice':uitab.table.filterChoose!=filter}"
+          ng-repeat="filter in uitab.table.filters">
+		      <span style="text-align:center;" ng-click="selectedTableFilter(uitab.table,filter)">{{filter}}年</span>        &nbsp;&nbsp;&nbsp;
+          <span style="text-align:center;" class="icon-remove" ng-click="deleteYear(uitab,filter)"></span>
+        </span>
+        <span class="ljw_table_date_choice">
+                  <span style="text-align:center;">
+                    <input id="createYear" name="createYear" style="width:75px;" placeholder="YYYY"
+                    ng-keyup="createYear(uitab,'createYear',$event)" ng-model="fxB0304_3_5.myCreateYear"
+                    ng-init="uitab.showInput=false" ng-show="uitab.showInput"/>
+                  </span>
+        <span style="text-align:center;" class="icon-plus" ng-click="uitab.showInput=!uitab.showInput"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

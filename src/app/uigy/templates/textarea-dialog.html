@@ -1,0 +1,13 @@
+<div class="l_project_layer1" style="height: 350px;">
+  <div class="title" style="width:100%;">
+    文本域
+    <i ng-click="closeThisDialog(1)" class="icon-remove l_project_layer_close"></i>
+  </div>
+  <div class="layer_table" style="padding:0;max-height:240px;overflow: hidden;">
+    <textarea style="width:100%;height:100%;resize:none;" ng-model="description" placeholder="请输入文本信息"></textarea>
+  </div>
+  <div class="footer" style="width: 100%;padding-right: 10px;">
+    <a class="btn btn-xs btn-default" style="border-radius: 0;" ng-click="closeThisDialog(1)">取消</a>
+    <a class="btn btn-xs btn-primary" style="border-radius: 0;" ng-click="save()">确定</a>
+  </div>
+</div>

@@ -1,0 +1,94 @@
+{
+  "name": "cs-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "browser": {
+    "jquery-ui": "./node_modules/jquery-ui/ui/widget.js",
+    "jquery": "./node_modules/jquery/dist/jquery.js",
+    "common": "../css/js/common.js",
+    "sword-adapter": "../css/js/SwordAdapter.js",
+    "nav": "../css/js/nav.js"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "jquery": "jQuery",
+    "jquery-ui": {
+      "depends": [
+        "jquery:jQuery"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.2.10",
+    "@types/node": "^8.0.17",
+    "@types/reflect-metadata": "0.0.5",
+    "angular-route": "^1.6.5",
+    "babel-cli": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-decorators": "^6.24.1",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-env": "^1.6.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babelify": "^7.3.0",
+    "browserify": "^14.4.0",
+    "browserify-shim": "^3.8.14",
+    "css-stringify": "^2.0.0",
+    "del": "^3.0.0",
+    "eslint": "^4.3.0",
+    "graceful-fs": "^4.1.11",
+    "gulp": "^3.9.1",
+    "gulp-angular-filesort": "^1.1.1",
+    "gulp-angular-templatecache": "^2.0.0",
+    "gulp-babel": "^6.1.2",
+    "gulp-bom": "^1.0.0",
+    "gulp-clean-css": "^3.7.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-concat-css": "^2.3.0",
+    "gulp-convert-encoding": "^1.0.0",
+    "gulp-css-url-adjuster": "^0.2.3",
+    "gulp-filter": "^5.0.0",
+    "gulp-import-css": "^0.1.3",
+    "gulp-inject": "^4.2.0",
+    "gulp-main-bower-files": "^1.6.2",
+    "gulp-main-npm-files": "^1.0.5",
+    "gulp-minify-html": "^1.0.6",
+    "gulp-sass": "^3.1.0",
+    "gulp-sourcemaps": "^2.6.0",
+    "gulp-uglify": "^3.0.0",
+    "gulpclass": "^0.1.2",
+    "main-bower-files": "^2.13.1",
+    "minimatch": "^3.0.2",
+    "path": "^0.12.7",
+    "rollup-stream": "^1.23.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.4.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "angular": "^1.6.5",
+    "babel-polyfill": "^6.23.0",
+    "blueimp-file-upload": "^9.18.0",
+    "bootstrap": "^3.3.7",
+    "bootstrap-sass": "^3.3.7",
+    "bootstrap3-dialog": "^1.35.4",
+    "echarts": "^3.6.2",
+    "events": "^1.1.1",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "jquery-contextmenu": "^2.5.0",
+    "jquery-ui": "^1.12.1",
+    "ng-dialog": "^1.3.0"
+  }
+}

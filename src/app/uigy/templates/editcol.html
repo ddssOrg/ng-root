@@ -1,0 +1,21 @@
+<div class="modal-content" style="height:100%">
+  <div class="modal-header">
+    <a style="font-weight: 400;font-size: 34px;line-height: 24px;" href="javascript:;" class="close" ng-click="closeThisDialog(1)">&times;</a>
+    <h4 style="font-family: Microsoft YaHei; font-size: 18px;color: #232325;text-align: center;" class="modal-title">编辑动态列</h4>
+  </div>
+  <div style="padding-left: 40px;" class="modal-body">
+    <div>{{description}}</div>
+    <div style="margin-top: 10px;margin-bottom: 10px;max-height:150px;overflow-y: auto;">
+      <div ng-repeat="head in editHeads" ng-hide="head.isdel" style="margin-top: 5px; margin-bottom: 5px;">
+        <input name="editHead{{head.value}}" type="text" ng-style="checkRequired(head)" placeholder="请输入{{head.propertyName}}" style="border:1px solid #dddddd;width: 250px;height: 30px;"
+          ng-model="head.value" ng-keyup="editcol_keyup($event, head, editHeads, $index);">
+        <span>{{head.unit}}</span>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button style="background-color: #369edd !important;border-color: #369edd;color: #ffffff !important;" type="button" class="btn btn-sm btn-info"
+      ng-click="ok()">确定</button>
+    <button type="button" class="btn btn-sm btn-danger" ng-click="closeThisDialog(1)">返回</button>
+  </div>
+</div>

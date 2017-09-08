@@ -1,0 +1,26 @@
+.react-table {
+  & > .react-row{
+    & > .react-cell {
+
+       &::selection{
+          background: transparent; 
+       }
+
+      div, textarea, input, span, a, img {
+        overflow: hidden;
+        text-overflow:ellipsis;
+
+        &::selection{
+          background: transparent; 
+        }
+
+        &[contenteditable=true]{
+          &::selection{
+            background: lightblue;
+            color: #fff;
+          }
+        }
+      }
+    }
+  }
+}
