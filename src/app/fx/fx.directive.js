@@ -136,7 +136,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
   $scope.inputFocus = function (cell) {
     if ($scope.uimodule.label && $scope.uimodule.label.dataType == 'datetime' && isNull($scope.uimodule.label.value)) {
       setPrompt('请选择资料属期', false);
-      $('.ym-box').fadeIn(300);
+      //$('.ym-box').fadeIn(300);
     }
   }
   $(document).on('click', function (e) {
