@@ -295,10 +295,22 @@ angular.module('fx')
       }
     }
 
+    function buildGlobeEmptyRow(scope){
+      scope.emptyRowStatus = false;
+      var buttions = scope.uimodule.toolbar.buttons;
+      $.each(buttions, function (buttonIndex,uibuttion) {
+        if (uibuttion.action == 'switchEmptyRow') {
+          uibuttion.status = false;
+          uibuttion.label = uibuttion.status?uibuttion.labelOn:uibuttion.labelOff;
+        }
+      });
+    }
+
     return {
       setData,
       renderTable,
       rebuildTable,
-      buildGlobeShowType
+      buildGlobeShowType,
+      buildGlobeEmptyRow
     }
   }]);

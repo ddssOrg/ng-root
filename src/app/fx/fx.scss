@@ -357,35 +357,14 @@
     background:url(/resources/images/icon/bjdtl.png) no-repeat 2px 2px;
   }
   .dropdown-menu{
-    &::before {
-      top: -10px;
-      border: 10px solid transparent;
-      border-top: 0;
-      border-bottom-color: rgba(0,0,0,0.1);
-      content: "";
-      display: inline-block;
-      position: absolute;
-      left: 50%;
-      margin-left: -5px;
-    }
-    &::after{
-      bottom: auto;
-      top: -9px;
-      border: 10px solid transparent;
-      border-top: 0;
-      border-bottom-color: #fff;
-      content: "";
-      display: inline-block;
-      position: absolute;
-      left: 50%;
-      margin-left: -5px;
-      
-    }
-    padding: 10px 15px;
-    width: 127px;
+    background:url(/resources/images/icon/dropdowm-menu.png) no-repeat;
+    width:127px;
+    height:107px;
   }
   .dropdown-menu li{
     width: 107px;
+    margin-left: 20px;
+    margin-top:14px;
   }
   .dropdown-menu>li>a{
     font-family:Microsoft YaHei;

@@ -18,13 +18,13 @@
         <i ng-if="uiheadcell.icon" class="{{uiheadcell.icon}}"></i>
         <i ng-if="uiheadcell.dataType == 'text'&&!uiheadcell.editmodle" class="bjdtl" data-toggle="dropdown">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</i>
         <ul class="dropdown-menu" role="menu" ng-if="uiheadcell.dataType == 'text'&&!uiheadcell.editmodle">
-          <li>
+          <li style="margin-top:14px;">
             <a ng-click="addColumn(uiheadcell, uitab.table, $index);">插入一列</a>
           </li>
-          <li ng-if="countDynamic(uiheadrow.headCells)>1">
-            <a ng-click="delColumn(uiheadcell, uitab.table, $index);">删除该列</a>
-          </li>
-          <li>
+          <li style="margin-top:0px" ng-if="countDynamic(uiheadrow.headCells)>1" ><a ng-click="delColumn(uiheadcell, uitab.table, $index);" >删除该列</a></li>
+          <li style="margin-top:3px;margin-bottom:3px" ng-if="countDynamic(uiheadrow.headCells)<=1" ><span style="color: #efefef; margin-left:  -50px;" >删除该列</span></li>
+
+          <li style="margin-top:3px;">
             <a ng-click="editColumn(uiheadcell,$event,$index);">编辑列名</a>
           </li>
         </ul>

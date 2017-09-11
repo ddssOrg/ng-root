@@ -969,10 +969,10 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         });
       }
     } else if ('switchShowType' === button.action) {
+      fxService.buildGlobeEmptyRow($scope);
       //切换展示版本
       if (!button.status) {
         //切换简版
-
         $scope.isQB = false;
         $scope.swithShowTypeData(false);
         //按钮切换为全版版
@@ -980,7 +980,6 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         button.label = '切换完整版';
         button.icon = 'icon-full';
         $('#showTypeSpan').text('简易版');
-        //button.icon = 'icon-full';
       } else {
         //切换全版
         $scope.isQB = true;
@@ -990,9 +989,11 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         button.label = '切换精简版';
         button.icon = 'icon-starter';
         $('#showTypeSpan').text('完整版');
-        //button.icon = 'icon-starter';
-
       }
+
+      //显示空科目
+
+
       window.changeflag = true;
       window.closeFlag = true;
     }
@@ -1235,7 +1236,11 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       }
     });
     caniclickthemonth = true;
-    $('.ym-box').fadeIn(100);
+    if($('.ym-box').is(":hidden")){
+			$('.ym-box').fadeIn(200);
+		}else{
+			$('.ym-box').fadeOut(200);
+		}
   };
 
   //公共

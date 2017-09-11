@@ -7,6 +7,7 @@ angular.module('app.shared')
       link: function ($scope, element, attrs) {
         let freezeColumnNum = 2; // freeze cols, subject to move to attribute
         let columnsWidth = 0; // col width of freeze columns
+        let columnsNumber = 0;
 
         /**
          * below is a bunch of dom element cache that would be read frequently
@@ -99,7 +100,7 @@ angular.module('app.shared')
           /**
            * bind events
            */
-          element.on('scroll.header-float', onElementScroll);
+          //element.on('scroll.header-float', onElementScroll);
           element.on('blur.header-float', '[contenteditable]', onWindowScroll);
           $(window).on('scroll.header-float', onWindowScroll);
         }
@@ -151,7 +152,6 @@ angular.module('app.shared')
           table = table || $('#main_table_' + tabId);
           panelHead = panelHead || $('#table_float_table_head_div_' + tabId);
           headerTitle = headerTitle || $('#tbhead_' + tabId);
-          
           
           var panelHeight = panel.height();
           var floatTopHeight = floatBarTop.height();
@@ -258,20 +258,28 @@ angular.module('app.shared')
           // larger than border width
           if (columnsWidth > 2 && !flag) return columnsWidth;
           columnsWidth = 0;
+          columnsNumber = 0; 
+          // if (table[0] && table[0].tHead && table[0].tHead.rows[0] && table[0].tHead.rows[0].cells.length) {
+          //   let cells = table[0].tHead.rows[0].cells;
+          //   for (let i = 0; i < freezeColumnNum; i++){
+          //     columnsWidth += cells[i].getClientRects()[0].width;
+          //   }
+          // }
+          //var columnsWidth = 0;
+					
+          table.find("td:lt("+freezeColumnNum+"), th:lt("+freezeColumnNum+")").each(
+						function(){
+              if (columnsNumber++ >= 2)return;
+							columnsWidth += $(this).outerWidth(true);
+						});
 
-          if (table[0] && table[0].tHead && table[0].tHead.rows[0] && table[0].tHead.rows[0].cells.length) {
-            let cells = table[0].tHead.rows[0].cells;
-            for (let i = 0; i < freezeColumnNum; i++){
-              columnsWidth += cells[i].getClientRects()[0].width;
-            }
-          }
           columnsWidth += 2;//显示边线
           //console.log(columnsWidth);
           return columnsWidth;
         }
 
         function destroy() {
-          element.off('scroll.header-float', onElementScroll);
+          //element.off('scroll.header-float', onElementScroll);
           $(window).off('scroll.header-float', onWindowScroll);
           element.off('blur.header-float', '[contenteditable]', onWindowScroll);
 

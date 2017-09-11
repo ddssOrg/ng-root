@@ -52,6 +52,16 @@ angular.module('fx')
       }
     }
 
+    function calculatorWidth(cells){
+      var width = $('#content').width();
+      var sumWidth = 0;
+      $(cells).each(function(cellIndex, cell){
+        sumWidth = sumWidth + cell.width;
+      });
+      var newWidth = Math.ceil(width*sumWidth/100);
+      return width > newWidth ? width : newWidth;
+    }
+
     function addColumn(addHead, table, headCellIndex) {
       let addHeadRows = [];
       //对表头与复杂表头计数
@@ -190,11 +200,18 @@ angular.module('fx')
         }
       });
 
-      let count = headCounts[headCounts.length - 1].count;
-      table.width = (table.width ? table.width : 1300) + count * 80;
+      //let count = headCounts[headCounts.length - 1].count;
+      //table.width = (table.width ? table.width : 1300) + count * 80;
+
+      window.changeflag = true;
+      window.closeFlag = true;
+      table.width = calculatorWidth(table.thead.headRows[0].headCells);
+      //window.setTimeout("$('#"+addHead.property+(index+1)+"').focus();", 50);
+
     }
 
     function delColumn(addHead, table, index) {
+
       let addHeadRows = [];
       //对表头与复杂表头计数
       let headCounts = [];
@@ -311,7 +328,7 @@ angular.module('fx')
       });
 
       let count = headCounts[headCounts.length - 1].count;
-      table.width = (table.width ? table.width : 1300) - count * 80;
+      table.width = calculatorWidth(table.thead.headRows[0].headCells);
       window.changeflag = true;
       window.closeFlag = true;
     }
