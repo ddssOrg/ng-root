@@ -1,5 +1,6 @@
 import { UISelection } from './selection';
 import { isIE } from '../../utils';
+import { newRow } from '../../../app/fx/services/providers';
 
 export class UIClipboard {
 
@@ -62,11 +63,29 @@ export class UIClipboard {
     let selection = this._sortSelections(this._table.selection);
     let cell = this._table.selection[0];
 
+    // console.log(this._table.tab);
+    // console.log(this._table.scope);
+    // let currentTab = this._table.scope.uitab || this._table.scope.tab;
+
     formatted.forEach((rowData, rowIndex) => {
       rowData.forEach((cellData, cellIndex) => {
-        if (cell.rowDataIndex + rowIndex >= this._table.rows.length) return;
-        let _cell = this._table.rows[cell.rowDataIndex + rowIndex]
-          .cells[cell.cellDataIndex + cellIndex];
+        if (cell.rowDataIndex + rowIndex >= this._table.rows.length){
+          if(!this._table.tab.table.addRowEnabled){
+            return;
+          }
+          for(var i = 0;i < cell.rowDataIndex + rowIndex + 1 - this._table.rows.length;i++){
+            let row = newRow(this._table.tab);           
+            row && this._table.addRow(row);
+            let new_cell = this._table.rows[row.rowIndex].cells[cell.cellDataIndex + cellIndex];
+            new_cell.value = cellData;  
+          }
+          window.changeflag = true;
+          window.closeFlag = true;
+          this._table.scope.$apply();
+          return;
+        } 
+        //debugger;
+        let _cell = this._table.rows[cell.rowDataIndex + rowIndex].cells[cell.cellDataIndex + cellIndex];
         if (!_cell || !_cell.editable) return;
         _cell.value = formatted[rowIndex][cellIndex];        
       });      
