@@ -889,14 +889,16 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                   //dialogScop.files = data;
                   var count = data.length;
                   var extend = new Array();
+                  $scope.firstLoad = true;
                   data.forEach(d => {
                     count--;
                     uimodule.tabs.forEach(tab => {
                       if (tab.id == d.id) {
+                        fxService.buildGlobeShowType(d, $scope);                        
                         fxService.setData(uimodule, tab, d, $scope);
                         window.changeflag = true;
                         window.closeFlag = true;
-                        if (d.extend != null) {
+                        if (d.extend != null && d.extend.checked) {
                           for (var extendIndex = 0; extendIndex < d.extend.checked.length; extendIndex++) {
                             extend.push(d.extend.checked[extendIndex]);
                           }
@@ -918,7 +920,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                     pageScope.checkedTime = zlsq;
                   }
                 } catch (e) {
-
+                  console.log('execute error:' + e);
                 }
                 window.hideMask();
 

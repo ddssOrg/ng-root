@@ -43,3 +43,19 @@
   border-radius: 2px;
   z-index: 10;
 }
+
+.md-tab{
+  display: block;
+    float: left;
+    padding: 5px 3px;
+    margin-right: 1px;
+    font-size: 14px;
+    color: #232325;
+}
+.md-tab:hover{
+    color: #232325;
+    text-decoration: none;
+    cursor: pointer;
+}
+.md-tab-right{
+}
