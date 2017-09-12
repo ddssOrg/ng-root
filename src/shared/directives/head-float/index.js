@@ -100,7 +100,7 @@ angular.module('app.shared')
           /**
            * bind events
            */
-          //element.on('scroll.header-float', onElementScroll);
+          element.on('scroll.header-float', onElementScroll);
           element.on('blur.header-float', '[contenteditable]', onWindowScroll);
           $(window).on('scroll.header-float', onWindowScroll);
         }
@@ -279,7 +279,7 @@ angular.module('app.shared')
         }
 
         function destroy() {
-          //element.off('scroll.header-float', onElementScroll);
+          element.off('scroll.header-float', onElementScroll);
           $(window).off('scroll.header-float', onWindowScroll);
           element.off('blur.header-float', '[contenteditable]', onWindowScroll);
 
