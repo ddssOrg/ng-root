@@ -83,8 +83,7 @@ export class UIClipboard {
           window.closeFlag = true;
           this._table.scope.$apply();
           return;
-        } 
-        //debugger;
+        }
         let _cell = this._table.rows[cell.rowDataIndex + rowIndex].cells[cell.cellDataIndex + cellIndex];
         if (!_cell || !_cell.editable) return;
         _cell.value = formatted[rowIndex][cellIndex];        

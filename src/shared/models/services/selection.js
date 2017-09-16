@@ -34,7 +34,7 @@ export class UISelection extends events.EventEmitter {
   init() {
     let _that = this;
     $(this._tableEle).on('mousedown.uiselection', 'td.react-cell', function (e) {
-      if (!this.__celldata.editable) return;
+      //if (!this.__celldata.editable) return;
 
       if (
         (e.ctrlKey || e.which === 3 || e.button === 2)
@@ -69,8 +69,11 @@ export class UISelection extends events.EventEmitter {
   }
 
   clear() {
-    this._selection.forEach(cell => {
-      this._deselect(cell);
+    var _that = this;
+    $.each(this._selection,function(index,cell){
+      if(_that._selection && _that._selection.length > 0){
+        _that._deselect(_that._selection[0]);
+      }      
     });
     this._selection = [];
     this._selectionMatric = null;
@@ -145,7 +148,6 @@ export class UISelection extends events.EventEmitter {
     ];
 
     let changes = this._compareMatric(newSelectionMatric, this._selectionMatric);
-    
     changes.leavingMat.forEach(cellMat => {
       let cell = this._table.rows[cellMat[1]].cells[cellMat[0]];
       this._deselect(cell);
@@ -154,7 +156,6 @@ export class UISelection extends events.EventEmitter {
       let cell = this._table.rows[cellMat[1]].cells[cellMat[0]];
       this._select(cell);
     });
-
     this._selectionMatric = newSelectionMatric;
   }
 
@@ -220,13 +221,15 @@ export class UISelection extends events.EventEmitter {
   }
 
   _deselect(cell) {
-    if (!cell.editable || !cell.visible) return;
+    //if (!cell.editable || !cell.visible) return;
+    //if (!cell.visible) return;
     cell.ele.classList.remove('td_selected');
-    this._selection.splice(this._selection.indexOf(cell));
+    this._selection.splice(this._selection.indexOf(cell),1);
   }
 
   _select(cell) {
-    if (!cell.editable || !cell.visible) return;
+    //if (!cell.editable || !cell.visible) return;
+    if (!cell.visible) return;
     cell.ele.classList.add('td_selected');
     this._selection.push(cell);
   }

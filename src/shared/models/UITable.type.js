@@ -31,6 +31,7 @@ import {
 export const ADD_ROW_EVENT = 'ADD_ROW_EVENT';
 export const BEFORE_ROWS_CHANGED = 'BEFORE_ROWS_CHANGED';
 export const AFTER_ROWS_CHANGED = 'AFTER_ROWS_CHANGED';
+export const AFTER_SLECTION_CHANGED = 'AFTER_SLECTION_CHANGED';
 
 /**
  * @abstract
@@ -104,6 +105,10 @@ export class UITable extends events.EventEmitter {
 
   get selection() {
     return this._selectionControl.selection;
+  }
+
+  get selectionControl(){
+    return this._selectionControl;
   }
 
   /**

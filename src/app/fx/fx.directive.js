@@ -1,7 +1,6 @@
 import { ScrollService } from './services/scroll.service';
 import { checkIsNotEmptyDynamicHead, addCommand, deleteCommand } from './services';
-import { cellvalidate } from './services';
-import { FXUITable } from './ui-table';
+import { UISelection } from '../../shared/models/services';
 
 angular.module('fx')
   .directive('cwhbbbfx', [() => {
@@ -347,7 +346,6 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
           param.jzrq = $scope.uimodule.label.value;
         }
       }
-
       var invalide = false, calculateErr = false;
       angular.forEach($scope.uimodule.tabs, function (tab, tabIndex) {
         if (!invalide) {
@@ -425,8 +423,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                       cjmx[cell.property + '_calculateErr'] = 'true';
                     }
                   }
-                }
-
+                }                
               });
               cjmxs.push(cjmx);
             });
@@ -502,6 +499,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
             window.isRunningCommand = false;
           } else {
             setPrompt(data.msg, false);
+            window.isRunningCommand = false;
           }
         }, function () {
           window.isRunningCommand = false;
@@ -1292,13 +1290,16 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     angular.forEach($scope.uimodule.tabs, function (tab, tabIndex) {
       if (tab.type == 'table') {
         if (tab.table.tbody) {
-          fxService.rebuildTable(tab, tab.table.tbody, $scope, tabIndex);
+          fxService.rebuildTable(tab, tab.table.tbody, $scope, tabIndex);          
+          tab.table.tbody.selectionControl.clear();
         } else {
           window.hideMask();
         }
       } else {
         window.hideMask();
       }
+
+     
     });
   }
 
