@@ -73,16 +73,15 @@ export class UIContextMenu extends events.EventEmitter {
             let cell = this[0].__celldata;
             let table = cell._table;
             return table.selection.find(_cell => {
-              // return isCalculate(
-              //   table.columns,
-              //   _cell,
-              //   table.rows,
-              //   _cell.rowDataIndex,
-              //   _cell.cellDataIndex,
-              //   table.tab,
-              //   table.scope.uimodule.tabs
-              // );
-              return true;
+              return !isCalculate(
+                table.columns,
+                _cell,
+                table.rows,
+                _cell.rowDataIndex,
+                _cell.cellDataIndex,
+                table.tab,
+                table.scope.uimodule.tabs
+              );
             });
           }
         },
