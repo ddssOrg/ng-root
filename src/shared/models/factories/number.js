@@ -63,8 +63,7 @@ export class UINumberFactory extends UIElementFactory {
   createTemplate({ cell }) {
     return `
     <div react-ele
-      contenteditable="false"
-      onblur="window.changeflag=true;window.closeFlag = true;"
+      contenteditable="false"      
       draggable="false"
       ${giveFontClassText(cell)}
       style="width: 100%; text-align: right; "
@@ -95,7 +94,9 @@ export class UINumberFactory extends UIElementFactory {
     // bindFontStyle(input.cell, ele);
     // bindTabIndex(input, ele);
   
-    ele.addEventListener('blur', () => {
+    ele.addEventListener('input', () => {
+      //console.log(11222);
+      //debugger;
       input.cell.value = ele.innerText;
       try {
         input.scope.exeFuncs(input.tab, input.cell, input.row.rowIndex, input.cell.colIndex);

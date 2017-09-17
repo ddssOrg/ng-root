@@ -1,5 +1,6 @@
 import { ScrollService } from './services/scroll.service';
 import { checkIsNotEmptyDynamicHead, addCommand, deleteCommand } from './services';
+import { cellvalidate } from './services';
 import { UISelection } from '../../shared/models/services';
 
 angular.module('fx')
@@ -51,7 +52,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       setPrompt(result.propertyName + ' ' + result.msg.join(','), result.succ);
     } else {
       window.changeflag = true;
-      closeFlag = true;
+      window.closeFlag = true;
       if (uitab.funcs && uitab.funcs.length > 0) {
         $(uitab.funcs).each(function (i, f) {
           if (window[f]) {
@@ -494,6 +495,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
           if (data.succ) {
             setPrompt('保存成功', true);
             window.changeflag = false;
+            window.closeFlag = false;
             //initData();
             initTimes();
             window.isRunningCommand = false;
@@ -1264,6 +1266,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
               addTime(time);
             } else {
               window.changeflag = false;
+              window.closeFlag = false;
             }
             window.hideMask();
           }
@@ -1276,6 +1279,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
             addTime(time);
           } else {
             window.changeflag = false;
+            window.closeFlag = false;
           }
           window.hideMask();
         }
@@ -1472,6 +1476,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       if (data.succ) {
         setPrompt('保存成功', true);
         window.changeflag = false;
+        window.closeFlag = false;
         $scope.uimodule.label.value = $scope.checkedTime;
         $scope.loadZlsqData($scope.uimodule.label.value);
         //刷新图标
@@ -1491,6 +1496,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       window.hideMask();
       window.isRunningCommand = false;
       window.changeflag = false;
+      window.closeFlag = false;
       setPrompt('保存失败', false);
     });
   }
