@@ -63,12 +63,11 @@ export class UIClipboard {
     let selection = this._sortSelections(this._table.selection);
     let cell = this._table.selection[0];
 
-    // console.log(this._table.tab);
-    // console.log(this._table.scope);
-    // let currentTab = this._table.scope.uitab || this._table.scope.tab;
-
     formatted.forEach((rowData, rowIndex) => {
       rowData.forEach((cellData, cellIndex) => {
+        if($.trim(cellData) == ''){
+          return;
+        }
         if (cell.rowDataIndex + rowIndex >= this._table.rows.length){
           if(!this._table.tab.table.addRowEnabled){
             return;
@@ -129,7 +128,7 @@ export class UIClipboard {
   }
 
   _getClipboardData(event) {
-    if (!document.queryCommandSupported('copy')) {
+    if (!document.queryCommandSupported('paste') || !document.queryCommandEnabled('paste')) {
       if (isIE()) {
         return window.clipboardData.getData('Text');
       } else {
@@ -144,7 +143,7 @@ export class UIClipboard {
   }
 
   _copyTextToClipboard(text, event) {
-    if (!document.queryCommandSupported('copy')) {
+    if (!document.queryCommandSupported('copy') || !document.queryCommandEnabled('copy')) {
       if (isIE()) {
         window.clipboardData.setData('Text', text);
       } else {
