@@ -64,3 +64,5 @@ $RECYCLE.BIN/
 
 
 /node_modules/
+npm-debug.log
+tmp/templateCacheHtml.js

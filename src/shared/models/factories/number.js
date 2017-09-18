@@ -87,16 +87,12 @@ export class UINumberFactory extends UIElementFactory {
     input.cell.editable = true;
 
     input.cell.on(CELL_VALUE_CHANGED, () => {
-      ele.innerText = input.cell.value;
+      $(ele).text($.trim(input.cell.value));
     });
     bindID(input.tab, input.cell, input.row, ele, 'number');
     bindFocus(ele, input.cell, input.scope);
-    // bindFontStyle(input.cell, ele);
-    // bindTabIndex(input, ele);
   
-    ele.addEventListener('input', () => {
-      //console.log(11222);
-      //debugger;
+    ele.addEventListener('blur', () => {
       input.cell.value = ele.innerText;
       try {
         input.scope.exeFuncs(input.tab, input.cell, input.row.rowIndex, input.cell.colIndex);

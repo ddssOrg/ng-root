@@ -31,18 +31,21 @@ export class UIClipboard {
   pasteSelection() {
     this._pasteSelection();
     this._table.scope.$apply();
+
+
+    input.scope.numberCellChange(input.tab, input.cell.colIndex);
+    input.scope.sumRowRefresh(input.tab);
   }
 
   _initPaste() {
     $(this._table._ele).on('paste.ui-clipboard', (e) => {
       if (!this._table.selection.length) return;
-	  
       this._pasteSelection(e);
+      this._table.scope.sumRowRefresh(this._table.tab);
       this._table.scope.$apply();
-      
       event.preventDefault();
       event.stopPropagation();
-	  return false;
+      return false;
     });
   }
 
@@ -65,18 +68,18 @@ export class UIClipboard {
 
     formatted.forEach((rowData, rowIndex) => {
       rowData.forEach((cellData, cellIndex) => {
-        if($.trim(cellData) == ''){
+        if ($.trim(cellData) == '') {
           return;
         }
-        if (cell.rowDataIndex + rowIndex >= this._table.rows.length){
-          if(!this._table.tab.table.addRowEnabled){
+        if (cell.rowDataIndex + rowIndex >= this._table.rows.length) {
+          if (!this._table.tab.table.addRowEnabled) {
             return;
           }
-          for(var i = 0;i < cell.rowDataIndex + rowIndex + 1 - this._table.rows.length;i++){
-            let row = newRow(this._table.tab);           
+          for (var i = 0; i < cell.rowDataIndex + rowIndex + 1 - this._table.rows.length; i++) {
+            let row = newRow(this._table.tab);
             row && this._table.addRow(row);
             let new_cell = this._table.rows[row.rowIndex].cells[cell.cellDataIndex + cellIndex];
-            new_cell.value = cellData;  
+            new_cell.value = cellData;
           }
           window.changeflag = true;
           window.closeFlag = true;
@@ -85,8 +88,15 @@ export class UIClipboard {
         }
         let _cell = this._table.rows[cell.rowDataIndex + rowIndex].cells[cell.cellDataIndex + cellIndex];
         if (!_cell || !_cell.editable) return;
-        _cell.value = formatted[rowIndex][cellIndex];        
-      });      
+        _cell.value = $.trim(formatted[rowIndex][cellIndex]);
+        try {
+          this._table.scope.exeFuncs(this._table.tab, _cell, cell.rowDataIndex + rowIndex, _cell.colIndex);
+        } catch (e) {
+          console.log('exe func error:' + e);
+        }
+        _cell.validate && _cell.validate();
+        this._table.scope.numberCellChange(this._table.tab, _cell.colIndex);
+      });
     });
 
     window.changeflag = true;
@@ -122,7 +132,7 @@ export class UIClipboard {
       .map(row => row.join('\t'))
       .join('\n');
   }
-  
+
   _sortSelections(selection) {
     return UISelection.sortSelections(selection);
   }
@@ -135,7 +145,7 @@ export class UIClipboard {
         return event.originalEvent.clipboardData.getData('Text');
       }
     } else {
-      !this._delegateEle && this._creatDelegateElement();      
+      !this._delegateEle && this._creatDelegateElement();
       this._delegateEle.select();
       document.execCommand('paste');
       return this._delegateEle.value;
@@ -147,7 +157,7 @@ export class UIClipboard {
       if (isIE()) {
         window.clipboardData.setData('Text', text);
       } else {
-        event.originalEvent.clipboardData.setData('Text',text);
+        event.originalEvent.clipboardData.setData('Text', text);
       }
     } else {
       !this._delegateEle && this._creatDelegateElement();
