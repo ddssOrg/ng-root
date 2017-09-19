@@ -110,10 +110,8 @@ angular.module('app.shared')
          */
         function onElementScroll() {
           var sl = Math.max(element[0].scrollLeft, document.documentElement.scrollLeft);
-          scroll_header
-            && scroll_header.length
-            // && (scroll_header[0].style.left = element[0].getClientRects()[0].left + 'px');
-            && (scroll_header[0].style.left = -sl + element.offset().left + 'px');
+          $('#table_float_table_head_copy_'+tabId).css('left',-sl + $(element).offset().left + 'px');
+          //scroll_header && scroll_header.length && (scroll_header[0].style.left = -sl + element.offset().left + 'px');
           table = table || $("#main_table_" + tabId);
 				
           if (!clonePanel) {
@@ -135,6 +133,7 @@ angular.module('app.shared')
               'top': panelHead.position().top,
               'overflow': 'hidden',
             });
+            clonePanelHead.find('input').remove();
             panelHead.after(clonePanelHead);
             panelBody.after(clonePanel);
             updateElementView();
