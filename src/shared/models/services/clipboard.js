@@ -94,7 +94,7 @@ export class UIClipboard {
         if (!_cell || !_cell.editable) return;
         _cell.value = $.trim(formatted[rowIndex][cellIndex]);
         try {
-          this._table.scope.exeFuncs(this._table.tab, _cell, cell.rowDataIndex + rowIndex, _cell.colIndex);
+          this._table.scope.exeFuncs(this._table.tab, _cell, _row.rowIndex, _cell.colIndex);
         } catch (e) {
           console.log('exe func error:' + e);
         }
