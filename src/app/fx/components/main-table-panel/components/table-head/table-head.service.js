@@ -52,14 +52,27 @@ angular.module('fx')
       }
     }
 
-    function calculatorWidth(cells){
+    function calculatorWidth(cells,table){
       var width = $('#content').width();
       var sumWidth = 0;
-      $(cells).each(function(cellIndex, cell){
-        sumWidth = sumWidth + cell.width;
-      });
-      var newWidth = Math.ceil(width*sumWidth/100);
-      return width > newWidth ? width : newWidth;
+      if(table.autowidth>width){
+        $(cells).each(function(cellIndex, cell){
+          sumWidth = sumWidth + Math.ceil(table.autowidth*cell.width/100);
+        });
+      }else{
+        $(cells).each(function(cellIndex, cell){
+          sumWidth = sumWidth + cell.width;
+        });
+        sumWidth = Math.ceil(width*sumWidth/100);
+      }
+      return width > sumWidth ? width : sumWidth - 1;
+
+
+      // $(cells).each(function(cellIndex, cell){
+      //   sumWidth = sumWidth + cell.width;
+      // });
+      // var newWidth = Math.ceil(width*sumWidth/100);
+      // return width > newWidth ? width : newWidth;
     }
 
     function addColumn(addHead, table, headCellIndex) {
@@ -205,13 +218,12 @@ angular.module('fx')
 
       window.changeflag = true;
       window.closeFlag = true;
-      table.width = calculatorWidth(table.thead.headRows[0].headCells);
+      table.width = calculatorWidth(table.thead.headRows[0].headCells,table);
       //window.setTimeout("$('#"+addHead.property+(index+1)+"').focus();", 50);
 
     }
 
     function delColumn(addHead, table, index) {
-
       let addHeadRows = [];
       //对表头与复杂表头计数
       let headCounts = [];
@@ -328,7 +340,7 @@ angular.module('fx')
       });
 
       let count = headCounts[headCounts.length - 1].count;
-      table.width = calculatorWidth(table.thead.headRows[0].headCells);
+      table.width = calculatorWidth(table.thead.headRows[0].headCells,table);
       window.changeflag = true;
       window.closeFlag = true;
     }

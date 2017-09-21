@@ -17,12 +17,12 @@ let calculateDivRender = (style, calculateDesc, checkedDesc) => {
 export function calculationHook(input, ele) {
   var isQB = input.scope.isQB;
   var cell = input.cell;
-  if (!isQB) {
-    $(ele).nextAll('.cell_calculate').hide();
-    $('.td_disabled').removeClass('td_disabled');
-    cell.editable = true;
-    return;
-  }
+  // if (!isQB) {
+  //   $(ele).nextAll('.cell_calculate').hide();
+  //   $('.td_disabled').removeClass('td_disabled');
+  //   cell.editable = true;
+  //   return;
+  // }
   var tab = input.tab;
   var row = input.row;
   var rowIndex = row.rowIndex;

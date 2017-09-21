@@ -22,7 +22,7 @@ export class UISelection extends events.EventEmitter {
     this._dragging = false;
     this._table = table;
     this._tableEle = table.ele;
-    
+
     this._startCell = null;
     this._endCell = null;
 
@@ -70,10 +70,10 @@ export class UISelection extends events.EventEmitter {
 
   clear() {
     var _that = this;
-    $.each(this._selection,function(index,cell){
-      if(_that._selection && _that._selection.length > 0){
+    $.each(this._selection, function (index, cell) {
+      if (_that._selection && _that._selection.length > 0) {
         _that._deselect(_that._selection[0]);
-      }      
+      }
     });
     this._selection = [];
     this._selectionMatric = null;
@@ -162,7 +162,7 @@ export class UISelection extends events.EventEmitter {
   _compareMatric(_newMat, _oldMat) {
     let enteringMat = [];
     let leavingMat = [];
-    
+
     if (!_oldMat) {
       for (let i = _newMat[0][0]; i <= _newMat[1][0]; i++) {
         for (let j = _newMat[0][1]; j <= _newMat[1][1]; j++) {
@@ -194,7 +194,7 @@ export class UISelection extends events.EventEmitter {
         }
       }
     }
-    
+
     return {
       enteringMat,
       leavingMat,
@@ -223,12 +223,14 @@ export class UISelection extends events.EventEmitter {
   _deselect(cell) {
     //if (!cell.editable || !cell.visible) return;
     //if (!cell.visible) return;
+    if (cell.row.hide) return;
     cell.ele.classList.remove('td_selected');
-    this._selection.splice(this._selection.indexOf(cell),1);
+    this._selection.splice(this._selection.indexOf(cell), 1);
   }
 
   _select(cell) {
     //if (!cell.editable || !cell.visible) return;
+    if (cell.row.hide) return;
     if (!cell.visible) return;
     cell.ele.classList.add('td_selected');
     this._selection.push(cell);

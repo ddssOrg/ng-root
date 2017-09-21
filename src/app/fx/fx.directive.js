@@ -276,6 +276,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       //$('.new_function_menu').hide();
       let param = { xmid: window.top.xmid, cjbddm: cjbddm, cjbgdms: cjbgdmArr.slice(0, 2) };
       $scope.loading++;
+      param.tableWidth = $scope.getWinWidth() + "";
       cwhbbbService.loadData(param, loadHBData);
 
       $scope.$on('ngRepeatFinished', () => {
@@ -289,6 +290,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
           if ($scope.checkedTime) {
             param.jzrq = $scope.checkedTime;
           }
+          param.tableWidth = $scope.getWinWidth() + "";
           cwhbbbService.loadData(param, loadHBData);
           $scope.loading++;
           $scope.$apply();
@@ -424,7 +426,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                       cjmx[cell.property + '_calculateErr'] = 'true';
                     }
                   }
-                }                
+                }
               });
               cjmxs.push(cjmx);
             });
@@ -434,7 +436,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
               for (var k in validateResult.errors) {
                 errors += validateResult.errors[k].propertyName + ':' + validateResult.errors[k].msg.join(',') + ',';
               }
-              errors = errors.substring(0,errors.length - 1);
+              errors = errors.substring(0, errors.length - 1);
               setPrompt(errors, false);
             }
           }
@@ -894,7 +896,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                     count--;
                     uimodule.tabs.forEach(tab => {
                       if (tab.id == d.id) {
-                        fxService.buildGlobeShowType(d, $scope);                        
+                        fxService.buildGlobeShowType(d, $scope);
                         fxService.setData(uimodule, tab, d, $scope);
                         window.changeflag = true;
                         window.closeFlag = true;
@@ -1238,11 +1240,11 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       }
     });
     caniclickthemonth = true;
-    if($('.ym-box').is(":hidden")){
-			$('.ym-box').fadeIn(200);
-		}else{
-			$('.ym-box').fadeOut(200);
-		}
+    if ($('.ym-box').is(":hidden")) {
+      $('.ym-box').fadeIn(200);
+    } else {
+      $('.ym-box').fadeOut(200);
+    }
   };
 
   //公共
@@ -1257,6 +1259,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     angular.forEach($scope.uimodule.tabs, function (tab) {
       if (tab.type == 'table') {
         var param = { xmid: window.top.xmid, cjbddm: cjbddm, cjbgdms: tab.id, jzrq: $scope.checkedTime };
+        param.tableWidth = $scope.getWinWidth()+"";
         cwhbbbService.loadData(param, function (uidata) {
           fxService.buildGlobeShowType(uidata[0], $scope);
           fxService.setData($scope.uimodule, tab, uidata[0], $scope);
@@ -1294,7 +1297,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     angular.forEach($scope.uimodule.tabs, function (tab, tabIndex) {
       if (tab.type == 'table') {
         if (tab.table.tbody) {
-          fxService.rebuildTable(tab, tab.table.tbody, $scope, tabIndex);          
+          fxService.rebuildTable(tab, tab.table.tbody, $scope, tabIndex);
           tab.table.tbody.selectionControl.clear();
         } else {
           window.hideMask();
@@ -1303,7 +1306,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         window.hideMask();
       }
 
-     
+
     });
   }
 
@@ -1416,9 +1419,9 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
             //处理提示
             var errors = '';
             for (var k in validateResult.errors) {
-              errors += ',' + validateResult.errors[k].propertyName + validateResult.errors[k].msg.join(',');              
+              errors += ',' + validateResult.errors[k].propertyName + validateResult.errors[k].msg.join(',');
             }
-            errors=errors.subString(0,errors.length-1);
+            errors = errors.subString(0, errors.length - 1);
             setPrompt(errors.substring(1), false);
           }
         }
@@ -1581,5 +1584,15 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     $("body").rightMenu({
       isglcx: false
     });
+  }
+
+  $scope.getWinWidth = function () {
+    var winWidth;
+    if (window.innerWidth) {
+      winWidth = window.innerWidth;
+    } else if ((document.body) && (document.body.clientWidth)) {
+      winWidth = document.body.clientWidth;
+    }
+    return winWidth;
   }
 }

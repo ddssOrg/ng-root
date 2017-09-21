@@ -65,7 +65,7 @@ export class UIClipboard {
 
     let selection = this._sortSelections(this._table.selection);
     let cell = this._table.selection[0];
-
+    let _rowIndex = 0;
     formatted.forEach((rowData, rowIndex) => {
       rowData.forEach((cellData, cellIndex) => {
         if ($.trim(cellData) == '') {
@@ -86,7 +86,11 @@ export class UIClipboard {
           this._table.scope.$apply();
           return;
         }
-        let _cell = this._table.rows[cell.rowDataIndex + rowIndex].cells[cell.cellDataIndex + cellIndex];
+        if(_rowIndex == 0){
+          _rowIndex = cell.rowDataIndex + rowIndex;
+        }        
+        let _row = this._getEnenabledRow(this._table.rows, _rowIndex);     
+        let _cell = _row.cells[cell.cellDataIndex + cellIndex];
         if (!_cell || !_cell.editable) return;
         _cell.value = $.trim(formatted[rowIndex][cellIndex]);
         try {
@@ -96,12 +100,25 @@ export class UIClipboard {
         }
         _cell.validate && _cell.validate();
         this._table.scope.numberCellChange(this._table.tab, _cell.colIndex);
+        _rowIndex = _row.rowIndex + 1;
       });
     });
 
     window.changeflag = true;
     window.closeFlag = true;
 
+  }
+
+  _getEnenabledRow(rows, rowIndex) {
+    if (rows.length == rowIndex - 1) {
+      return;
+    }
+    let _row = rows[rowIndex];
+    if (_row.hide) {
+      rowIndex++;
+      _row = this._getEnenabledRow(rows, rowIndex);
+    }
+    return _row;
   }
 
   _copySelection(e) {

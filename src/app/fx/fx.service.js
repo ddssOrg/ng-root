@@ -13,6 +13,7 @@ angular.module('fx')
       //tableWidth
       if (uidata.tableWidth) {
         tab.table.width = uidata.tableWidth
+        tab.table.autowidth=uidata.tableWidth;
       }
       //filter
       if (tab.table && tab.table.filterProperty) {
@@ -208,7 +209,7 @@ angular.module('fx')
 
     function rebuildTable(tab, tbody, scope, tabIndex) {
       var sortIndex = 0;
-      var hiddenIndex = 0;
+      //var hiddenIndex = 0;
       tbody.rows.forEach((row, rowIndex) => {
 
         switchShowType(row, scope);
@@ -216,8 +217,6 @@ angular.module('fx')
         if (!row.hide) {
           sortIndex++;
           row.xh = sortIndex;
-        }else{
-          hiddenIndex++;
         }
 
         row.cells.forEach((cell, colIndex) => {
@@ -232,11 +231,11 @@ angular.module('fx')
 
         });
       });
-      if(hiddenIndex == tbody.rows.length){      
-        tbody.empty = true;
-      }else{
-        tbody.empty = false;
-      }
+      // if(hiddenIndex == tbody.rows.length){      
+      //   tbody.empty = true;
+      // }else{
+      //   tbody.empty = false;
+      // }
     }
 
     function switchShowType(row, scope) {
