@@ -67,6 +67,10 @@ export class UIClipboard {
     let cell = this._table.selection[0];
     let _rowIndex = 0;
     formatted.forEach((rowData, rowIndex) => {
+      if (_rowIndex == 0) {
+        _rowIndex = cell.rowDataIndex + rowIndex;
+      }
+      let _row = this._getEnenabledRow(this._table.rows, _rowIndex);
       rowData.forEach((cellData, cellIndex) => {
         if ($.trim(cellData) == '') {
           return;
@@ -86,10 +90,8 @@ export class UIClipboard {
           this._table.scope.$apply();
           return;
         }
-        if(_rowIndex == 0){
-          _rowIndex = cell.rowDataIndex + rowIndex;
-        }        
-        let _row = this._getEnenabledRow(this._table.rows, _rowIndex);     
+
+
         let _cell = _row.cells[cell.cellDataIndex + cellIndex];
         if (!_cell || !_cell.editable) return;
         _cell.value = $.trim(formatted[rowIndex][cellIndex]);
@@ -100,8 +102,8 @@ export class UIClipboard {
         }
         _cell.validate && _cell.validate();
         this._table.scope.numberCellChange(this._table.tab, _cell.colIndex);
-        _rowIndex = _row.rowIndex + 1;
       });
+      _rowIndex = _row.rowIndex + 1;
     });
 
     window.changeflag = true;
