@@ -15,6 +15,7 @@ export const projectConfig = {
     `${projectRoot}/webapp/css/js/nav.js`,
     `${projectRoot}/webapp/css/plugins/paste/pasteforcj.js`,
     `${projectRoot}/webapp/css/plugins/rightMenu/rightMenu.js`,
+    `${projectRoot}/webapp/css/plugins/dialog/bootstrap-dialog.js`,
   ],
   externalCss: [
     `${projectRoot}/webapp/css/css/bootstrap.min.css`,
@@ -28,5 +29,6 @@ export const projectConfig = {
     `${projectRoot}/webapp/css/plugins/jquery.datetimepicker/jquery.datetimepicker.min.css`,
     `${projectRoot}/webapp/css/plugins/dialog/bootstrap-dialog.css`,
     `${projectRoot}/webapp/uigy/uigy.css`,
+    `${projectRoot}/webapp/css/plugins/image/fxImage.css`,
   ],
 };

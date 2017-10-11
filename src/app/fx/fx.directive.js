@@ -30,6 +30,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
   $scope.xsbz = 'QB';
   $scope.firstLoad = true;
   $scope.emptyRowStatus = false;
+  $scope.glfjBgdm = '';
 
   //初始化UI
   var initUI = function () {
@@ -268,12 +269,9 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         });
         if (scrollService.loadIndex == cjbgdmArr.length - 2) {
           validetebgjjy($scope.uimodule.tabs);
-          //$('.new_function_menu').show();
           return;
         }
       }
-
-      //$('.new_function_menu').hide();
       let param = { xmid: window.top.xmid, cjbddm: cjbddm, cjbgdms: cjbgdmArr.slice(0, 2) };
       $scope.loading++;
       param.tableWidth = $scope.getWinWidth() + "";
@@ -860,10 +858,10 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       cwhbbbService.getLoadFiles({ xmid: window.top.xmid, cjbddm: cjbddm }, function (data) {
         var files = data;
         window.hideMask();
-        if (files.length <= 0) {
-          setPrompt('该分析对应的采集文件尚未提交', false);
-          return;
-        }
+        // if (files.length <= 0) {
+        //   setPrompt('该分析对应的采集文件尚未提交', false);
+        //   return;
+        // }
         showDialog(files);
       }, function () {
         setPrompt('加载文件列表失败', false);
@@ -874,6 +872,16 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
           width: 1100,
           template: 'app/fx/templates/load-file-dialog.html',
           className: 'ngdialog-theme-plain',
+          closeByEscape: false,
+          closeByDocument: false,
+          overlay: true,
+          onOpenCallback: function () {
+            window.showHeaderMask();
+          },
+          preCloseCallback: function () {
+            window.hideHeaderMask();
+          },
+          appendTo: top.body,
           controller: ['$scope', (dialogScop) => {
             dialogScop.files = files;
             dialogScop.selectedFile = function (uuid) {
@@ -883,6 +891,33 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                 dialogScop.seluuid = false;
               }
             }
+
+            //下载模板
+            dialogScop.loadTemplate = function () {
+              if (uimodule.template && uimodule.template != null) {
+                var downLoadUrl = "/download.sword?ctrl=DemoCtrl_downloadallfile&mbpath=" + uimodule.template;
+                window.location.href = downLoadUrl;
+              } else {
+                setPrompt("未获取到模板信息，下载失败", false);
+              }
+            }
+
+            dialogScop.editFjxg = function (file) {
+              var xmid = file.xmid;
+              var fileCjbddm = file.cjbddm;
+              var fileCjbgdm = file.cjbgdm;
+              var fileCjmxdm = file.cjmxdm;
+              var fileName = file.filename;
+              var fileTitle = file.filetitle;
+
+              var url = "/resources/pageoffice/editFjxg.jsp?xmid=" + xmid + "&cjbddm=" + fileCjbddm + "&cjbgdm=" + fileCjbgdm +
+                "&cjmxdm=" + fileCjmxdm + "&fileName=" + fileName + "&fileTitle=" + fileTitle + "&isdialog=false";
+              if (window.browser.versions.trident || window.browser.versions.webKit) {//IE或者360浏览器
+                window.hideHeaderMask();
+                window.top.MainPage.newTab(fileCjmxdm + '_editFjxg', fileTitle, 'icon-home', url, true);
+              }
+            }
+
             dialogScop.loadFile = function () {
               window.showMask();
               cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {
@@ -1259,7 +1294,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     angular.forEach($scope.uimodule.tabs, function (tab) {
       if (tab.type == 'table') {
         var param = { xmid: window.top.xmid, cjbddm: cjbddm, cjbgdms: tab.id, jzrq: $scope.checkedTime };
-        param.tableWidth = $scope.getWinWidth()+"";
+        param.tableWidth = $scope.getWinWidth() + "";
         cwhbbbService.loadData(param, function (uidata) {
           fxService.buildGlobeShowType(uidata[0], $scope);
           fxService.setData($scope.uimodule, tab, uidata[0], $scope);

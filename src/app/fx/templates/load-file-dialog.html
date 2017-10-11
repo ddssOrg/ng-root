@@ -17,10 +17,10 @@
         <th style="width: 91px; text-align: center;">资料属期</th>
         <th style="width: 60px; text-align: center;">是否已导入</th>
       </tr>
-      <tr ng-repeat="file in files" ng-click="selectedFile(file.uuid)">
-        <td style="width: 50px; text-align: left;"><input type="checkbox" ng-checked="seluuid==file.uuid"></td>
+      <tr ng-repeat="file in files">
+        <td style="width: 50px; text-align: left;"><input type="checkbox" ng-click="selectedFile(file.uuid)" ng-checked="seluuid==file.uuid"></td>
         <td style="width: 50px; text-align: left;">{{file.xh}}</td>
-        <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;text-align: left;">{{file.filetitle}}</td>
+        <td style="max-width: 150px;text-align: left; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"><a ng-click="editFjxg(file)" style="cursor:pointer;">{{file.filetitle}}</a></td>
         <td style="width: 100px; text-align: left;">{{file.filetype}}</td>
         <td style="max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;text-align: left;">{{file.filecomment}}</td>
         <td style="width: 100px; text-align: left;">{{file.lrrq|date:'yyyy-MM-dd'}}</td>
@@ -32,6 +32,8 @@
     </table>
   </div>
   <div class="modal-footer">
+    <!-- <button type="button" id="uploadFileTemplate" class="btn btn-sm btn-info" style="margin-right:5px;">上传</button> -->
+    <button type="button" class="btn btn-sm btn-info" ng-click="loadTemplate()">下载</button>
     <button type="button" class="btn btn-sm btn-info" ng-click="loadFile()" ng-class="{'disabled':!seluuid}">导入</button>
     <button type="button" class="btn btn-sm btn-danger" ng-click="closeThisDialog(1)">返回</button>
   </div>

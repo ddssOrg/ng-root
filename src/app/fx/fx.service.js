@@ -13,8 +13,21 @@ angular.module('fx')
       //tableWidth
       if (uidata.tableWidth) {
         tab.table.width = uidata.tableWidth
-        tab.table.autowidth=uidata.tableWidth;
+        tab.table.autowidth = uidata.tableWidth;
       }
+
+      //获取下载模板url
+      if (uidata.downLoadTemplate && uidata.downLoadTemplate != null) {
+        scope.uimodule.template = uidata.downLoadTemplate;
+      }
+
+      //获取上传文件url
+      if (uidata.templateName && uidata.templateName != null) {
+        scope.uimodule.templateName = uidata.templateName;
+        //初始化上传组件
+        initUploadFile(scope);
+      }
+
       //filter
       if (tab.table && tab.table.filterProperty) {
         tab.table.filters = [];
@@ -132,6 +145,10 @@ angular.module('fx')
       }
       if (tab.table && tab.table.filterProperty && tab.table.filters.length > 0) {
         tab.table.filterChoose = tab.table.filters[0];
+      }
+      if (tab.subTable && tab.subTable != null) {
+        //获取关联附件选择列表的表格代码
+        scope.glfjBgdm = tab.id;
       }
       if (uidata && uidata.subDatas) {
         var rows = [];
@@ -264,14 +281,14 @@ angular.module('fx')
       }
     }
 
-    function buildGlobeShowType(uidata,scope) {
+    function buildGlobeShowType(uidata, scope) {
       if (uidata.extend && scope.firstLoad) {
         var xsbz = uidata.extend.xsbz;
         if (xsbz == 'QB') {
           scope.isQB = true;
           $('#showTypeSpan').text('完整版');
           var buttions = scope.uimodule.toolbar.buttons;
-          $.each(buttions, function (buttonIndex,uibuttion) {    
+          $.each(buttions, function (buttonIndex, uibuttion) {
             if (uibuttion.action == 'switchShowType') {
               uibuttion.status = false;
               uibuttion.label = '切换精简版';
@@ -282,7 +299,7 @@ angular.module('fx')
           scope.isQB = false;
           $('#showTypeSpan').text('简易版');
           var buttions = scope.uimodule.toolbar.buttons;
-          $.each(buttions, function (buttonIndex,uibuttion) {
+          $.each(buttions, function (buttonIndex, uibuttion) {
             if (uibuttion.action == 'switchShowType') {
               uibuttion.status = true;
               uibuttion.label = '切换完整版';
@@ -294,16 +311,75 @@ angular.module('fx')
       }
     }
 
-    function buildGlobeEmptyRow(scope){
+    function buildGlobeEmptyRow(scope) {
       scope.emptyRowStatus = false;
       var buttions = scope.uimodule.toolbar.buttons;
-      $.each(buttions, function (buttonIndex,uibuttion) {
+      $.each(buttions, function (buttonIndex, uibuttion) {
         if (uibuttion.action == 'switchEmptyRow') {
           uibuttion.status = false;
-          uibuttion.label = uibuttion.status?uibuttion.labelOn:uibuttion.labelOff;
+          uibuttion.label = uibuttion.status ? uibuttion.labelOn : uibuttion.labelOff;
         }
       });
     }
+
+    function initUploadFile(scope) {
+      $("#uploadFileTemplate").cssFileUpload({
+        url: '/ajax.sword?ctrl=DemoCtrl_uploadWdxmPic',
+        simple: false,
+        multiple: true,
+        template: scope.uimodule.templateName ? scope.uimodule.templateName.split("_")[0] : "",
+        data: { xmid: window.top.xmid, cjmxdm: scope.uimodule.templateName ? scope.uimodule.templateName.split("_")[1] : "" },
+        onBeforeSelectFile: function (selectFile) {
+          selectFile();
+        },
+        add: function (e, data) {
+          //获取一次上传的文件数量
+          scope.fileCount = data.files.length;
+        },
+        success: function (result, textStatus, jqXHR) {
+          if (result.succ == true) {
+            var bbrqz = "";
+            if (scope.uimodule.label && scope.uimodule.label.value) {
+              bbrqz = scope.uimodule.label.value;
+            }
+            $.ajax({
+              url: '/ajax.sword?ctrl=ModifyXmfjGyCtrl_saveFxXmfjData',
+              type: 'post',
+              data: { xmid: window.top.xmid, cjmxdm: result.cjmxdm, cjbgdm: scope.glfjBgdm, cjbddm: cjbddm, fileCount: scope.fileCount, bbrqz: bbrqz },
+              success: function (res) {
+                angular.forEach(scope.uimodule.tabs, function (tab) {
+                  if (tab.id == scope.glfjBgdm) {
+                    var rows = [];
+                    angular.forEach(res, function (rowdata, rowIndex, rowArr) {
+                      var row = { rowIndex: rowIndex, cells: [] };
+                      if (isNotNull(tab.subTable)) {
+                        angular.forEach(tab.subTable.columns, function (column, colIndex, colArr) {
+                          var value = rowdata[column.property];
+                          var cell = angular.copy(column);
+                          cell.colIndex = colIndex;
+                          cell.value = value;
+                          if (cell.dataType == 'id') {
+                            row.id = value;
+                          }
+                          row.cells[colIndex] = cell;
+                        });
+                        rows[rowIndex] = row;
+                      }
+                    });
+                    if (isNotNull(tab.subTable)) {
+                      scope.$apply(function () {
+                        tab.subTable.tbody = { rows: rows };
+                      });
+                    }
+                  }
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+
 
     return {
       setData,
