@@ -175,22 +175,18 @@ angular.module('fx')
         tab.table.tbody.regroupRows();
         tab.table.tbody.regroupCells();
         tab.table.tbody.append(`#main_table_${tab.id}`);
-        //console.log('table appending time: ', new Date().getTime() - startTime);
 
         $timeout(() => {
           var startTime = new Date().getTime();
           renderTable(tab, tab.table.tbody, scope, uimodule);
-          //console.log('table rendering time: ', new Date().getTime() - startTime);
         });
       }
-      //console.log('set data time:', Date.now() - setDataStart);
     }
 
     function renderTable(uitab, tbody, scope, uimodule) {
       var sortIndex = 0;
       tbody.rows.forEach((row, rowIndex) => {
-        //console.log(row);
-
+        
         switchShowType(row, scope);
 
         if (!row.hide) {
