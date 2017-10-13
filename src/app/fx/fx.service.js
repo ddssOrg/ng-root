@@ -186,7 +186,7 @@ angular.module('fx')
     function renderTable(uitab, tbody, scope, uimodule) {
       var sortIndex = 0;
       tbody.rows.forEach((row, rowIndex) => {
-        
+
         switchShowType(row, scope);
 
         if (!row.hide) {
@@ -326,6 +326,10 @@ angular.module('fx')
         template: scope.uimodule.templateName ? scope.uimodule.templateName.split("_")[0] : "",
         data: { xmid: window.top.xmid, cjmxdm: scope.uimodule.templateName ? scope.uimodule.templateName.split("_")[1] : "" },
         onBeforeSelectFile: function (selectFile) {
+          if (scope.uimodule.label && scope.uimodule.label.dataType == 'datetime' && isNull(scope.uimodule.label.value)) {           
+            setPrompt('请选择资料属期', false);
+            return;
+          }
           selectFile();
         },
         add: function (e, data) {

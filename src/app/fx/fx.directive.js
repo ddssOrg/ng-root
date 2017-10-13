@@ -858,10 +858,6 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       cwhbbbService.getLoadFiles({ xmid: window.top.xmid, cjbddm: cjbddm }, function (data) {
         var files = data;
         window.hideMask();
-        // if (files.length <= 0) {
-        //   setPrompt('该分析对应的采集文件尚未提交', false);
-        //   return;
-        // }
         showDialog(files);
       }, function () {
         setPrompt('加载文件列表失败', false);
@@ -920,7 +916,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
 
             dialogScop.loadFile = function () {
               window.showMask();
-              cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {
+              cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {                
                 try {
                   pageScope.fjuuid = dialogScop.seluuid;
                   //dialogScop.files = data;
@@ -957,7 +953,8 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                     pageScope.checkedTime = zlsq;
                   }
                 } catch (e) {
-                  console.log('execute error:' + e);
+                  debugger;
+                  console.log('execute error:' + e.lineNumber + ',' + e);
                 }
                 window.hideMask();
 
