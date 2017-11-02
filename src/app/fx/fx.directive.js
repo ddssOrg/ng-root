@@ -66,8 +66,6 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
 
   //执行配置的自定义脚本中的方法
   $scope.validetehbs = function (uitab) {
-    //		if(uitab.id == "C0201-3" || uitab.id == "C0201-4" || uitab.id == "C0201-5"){
-    //		}
     validetehbsData(uitab, uitab.table.columns, uitab.table.tbody.rows, $scope.uimodule);
   }
   $scope.selectedTableFilter = function (table, filter) {
@@ -996,9 +994,6 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                 $scope.uimodule.label.value = $scope.times.length > 0 ? $scope.times[0] : null;
                 $scope.checkedTime = $scope.times.length > 0 ? $scope.times[0] : null;
                 $scope.loadZlsqData($scope.checkedTime);
-                //								 alert("作废当期数据成功");
-                //								 initData();
-                //								 initTimes();
               }
             }
           });
@@ -1026,10 +1021,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         button.icon = 'icon-starter';
         $('#showTypeSpan').text('完整版');
       }
-
       //显示空科目
-
-
       window.changeflag = true;
       window.closeFlag = true;
     }

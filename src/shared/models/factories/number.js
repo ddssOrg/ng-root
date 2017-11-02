@@ -50,6 +50,7 @@ import {
 import {
   pasteHook,
   calculationHook,
+  modificationHook
 } from '../../hooks';
 
 @ElementFactory({
@@ -95,13 +96,19 @@ export class UINumberFactory extends UIElementFactory {
     ele.addEventListener('blur', () => {
       input.cell.value = ele.innerText;
       try {
-        input.scope.exeFuncs(input.tab, input.cell, input.row.rowIndex, input.cell.colIndex);
+        if(input.scope.exeFuncs){
+          input.scope.exeFuncs(input.tab, input.cell, input.row.rowIndex, input.cell.colIndex);
+        }        
       } catch (e) {
         console.log('exe func error:' + e);
       }
       input.cell.validate && input.cell.validate();
-      input.scope.numberCellChange(input.tab, input.cell.colIndex);
-      input.scope.sumRowRefresh(input.tab);
+      if(input.scope.numberCellChange){
+        input.scope.numberCellChange(input.tab, input.cell.colIndex);
+      }
+      if(input.scope.sumRowRefresh){
+        input.scope.sumRowRefresh(input.tab);
+      }      
       input.scope.$apply();
       window.changeflag = true;
       window.closeFlag = true;
@@ -122,11 +129,10 @@ export class UINumberFactory extends UIElementFactory {
     });
 
     ele.innerText = input.cell.value;
-    calculationHook(input, ele);
+    if(input.cell.calculateAble){
+      calculationHook(input, ele);
+    }    
     
-    // bindPaste(input, ele);
-    // pasteHook(input.scope, input.tab, input.$dataTable, input.row, input.cell, ele);
-
-    // return ele;
+    modificationHook(input, ele);
   }
 }

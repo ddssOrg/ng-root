@@ -66,7 +66,9 @@ export function bindValue(cell, ele, scope) {
 
 export function bindFocus(ele, cell, scope) {
   ele.addEventListener('focus', () => {
-    scope.inputFocus(cell);
+    if(scope.inputFocus){
+      scope.inputFocus(cell);
+    }    
   });
 }
 
@@ -74,7 +76,9 @@ export function bindBlur(cell, ele, tab, scope) {
   ele.addEventListener('blur', () => {
     cell.validate();
     try {
-      scope.exeFuncs(tab,cell);
+      if(scope.exeFuncs){
+        scope.exeFuncs(tab,cell);
+      }      
     } catch (e){
       console.log('exe funcn error:' + e);
     }

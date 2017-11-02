@@ -6,7 +6,6 @@ import {
   UISelection,
   UIClipboard,
   UIEdit,
-  UIContextMenu,
   EDIT_CELL_BLUR,
   EDIT_CELL_FOCUS,
   CONTEXT_NEW_DOWN,
@@ -120,12 +119,13 @@ export class UITable extends events.EventEmitter {
     super();
     this.__scope = scope; // angular scope
     this._tab = tab;
-    this._uimodule = uimodule
+    this._uimodule = uimodule;
     this._tabid = tab.id;
     this._rows = [];
     this._selectionControl = null;
     this._clipboardControl = null;
     this._editControl = null;
+    this._contextMenuControl = null;
 
     // $(window).on('onload', function () {
     //   this.rows = [];
@@ -164,7 +164,7 @@ export class UITable extends events.EventEmitter {
     this._selectionControl = new UISelection(this);
     this._clipboardControl = new UIClipboard(this);
     this._editControl = new UIEdit(this);
-    this._contextMenuControl = new UIContextMenu(this);
+    
 
     this._editControl.on(EDIT_CELL_BLUR, (cell) => {
     });
@@ -224,8 +224,10 @@ export class UITable extends events.EventEmitter {
     this._clipboardControl = null;
     this._editControl.dispose();
     this._editControl = null;
-    this._contextMenuControl.dispose();
-    this._contextMenuControl = null;
+    if(this._contextMenuControl){
+      this._contextMenuControl.dispose();
+      this._contextMenuControl = null;
+    }    
     this.removeAllListeners();
     this.rows.forEach(row => row.dispose.bind(row));
     this._$ele.find('*').off();

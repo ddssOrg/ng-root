@@ -7,8 +7,8 @@ import {
   TableFactory
 } from '../../../shared/models';
 import { FXUICell } from './UICell.type';
-
 import { newRow } from '../services';
+import { UIContextMenu } from '../../../shared/models/services';
 
 /**
  * inheritance of UITable
@@ -25,12 +25,12 @@ export class FXUITable extends UITable {
    */
   static factory(tableData, scope, tab, uimodule) {
     var table = new FXUITable(scope, tab, uimodule);
-    
     table.init(tableData);
     return table;
   }
 
   afterInit() {
+    this._contextMenuControl = new UIContextMenu(this);
     this._contextMenuControl.on(CONTEXT_NEW_DOWN, (selections) => {
       this.addRowBelow(selections);
     });

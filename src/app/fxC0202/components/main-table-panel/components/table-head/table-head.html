@@ -1,0 +1,12 @@
+<table id="table_float_table_head_{{uitab.id}}" class="table_new_style table table-new-border" style="table-layout: fixed; margin-bottom: 0;border-bottom:0;border-left: 1px solid #efefef;"
+    ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+    <thead>
+      <tr ng-repeat="uiheadrow in uitab.table.thead.headRows">
+        <th ng-repeat="uiheadcell in uiheadrow.headCells" rowspan="{{uiheadcell.rowspan}}" colspan="{{uiheadcell.colspan}}" style="text-align: center;cursor: default;"
+          ng-style="{'width':uiheadcell.width+'%'}">
+          <input name="checksq" type="checkbox" style="margin-top:0;" ng-if="uiheadcell.icon=='checkbox'" ng-init="uiheadcell.checked=false"
+            ng-model="uiheadcell.checked" ng-change="selectSQ(uiheadcell)" /> {{uiheadcell.value}} {{uiheadcell.unit}}
+        </th>
+      </tr>
+    </thead>
+  </table>

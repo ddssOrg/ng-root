@@ -107,14 +107,14 @@
   }
 
   #content{
-      padding:0 1em 0 35px;
+    padding: 0 0 0 0px;
   }/*此处为修改原css样式，原css样式对其他表格影响不详*/
   .l_project_tab1{
       position: absolute;
-      left: 5px;
-      top: -1px;
+      left: 0px;
+      top: 0px;
       margin: 0;
-      width: 28px;
+      width: 35px;
       z-index: 3;
   }
   #tabs{

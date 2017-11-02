@@ -1,0 +1,12 @@
+.fx-main-table-panel {
+  
+}
+
+table.table_new_style {
+  & > thead {
+    th {
+      word-break: keep-all;
+      background: #fff;
+    }
+  }
+}

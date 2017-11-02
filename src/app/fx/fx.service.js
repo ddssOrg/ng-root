@@ -235,6 +235,7 @@ angular.module('fx')
         row.cells.forEach((cell, colIndex) => {
           if (!row.hide && cell.property == 'xh') {
             cell.value = row.xh;
+            console.log(cell.value);
           }
           if (cell.dataType === 'number') {
             const input = { row, cell, tab, colIndex, rowIndex, tbody, scope, tabIndex };
@@ -244,11 +245,6 @@ angular.module('fx')
 
         });
       });
-      // if(hiddenIndex == tbody.rows.length){      
-      //   tbody.empty = true;
-      // }else{
-      //   tbody.empty = false;
-      // }
     }
 
     function switchShowType(row, scope) {

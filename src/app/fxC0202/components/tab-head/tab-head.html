@@ -1,0 +1,40 @@
+<div id="tbhead_{{::uitab.id}}" style="padding-top: 4px;background: #e5e5e5;color: #232325;font-family: Microsoft YaHei;font-size: 14px;height: 35px;line-height: 25px;padding-left: 14px;">
+  <a name="{{::uitab.id}}"></a>
+  <div style="padding-left: 15px;padding-right: 13px;border-left: 2px solid #fccd32;height: 27px">{{uitab.title}}
+    <span class="btn-group" style="padding-left: 20px;border-left: 1px solid #fccd32;text-align: left;float:right;height:25px"
+      ng-if="uitab.footerbar">
+      <button style = "padding-bottom: 7px;height:30px" 
+            ng-if="uibutton.action=='chart'"
+            ng-repeat="uibutton in uitab.footerbar.buttons" 
+            class="btn btn-xs"
+            ng-class="{'btn-info':'info'==uibutton.style,
+          'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+          'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}"
+            ng-click="exeCommand(uibutton,uitab)">
+            <i class="{{uibutton.icon}}"></i><span style="color: #232325;">{{uibutton.label}}</span>
+      </button>
+      <button 
+        style="padding-bottom: 7px;height:30px" 
+        ng-if="uibutton.action=='add'||(uibutton.action=='delete'&&hasSelectedRow(uitab))"
+        ng-repeat="uibutton in uitab.footerbar.buttons" 
+        class="btn btn-xs" 
+        ng-class="{'btn-info':'info'==uibutton.style,
+              'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+              'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" 
+        ng-click="exeCommand(uibutton,uitab)">
+            <i class="{{uibutton.icon}}"></i><span style="color: #232325;">{{uibutton.label}}</span>
+      </button>
+      <button 
+        style="padding-bottom: 7px;height:30px" 
+        ng-if="uibutton.action=='delete'&&!hasSelectedRow(uitab)" 
+        ng-repeat="uibutton in uitab.footerbar.buttons"
+        class="btn btn-xs" 
+        ng-class="{'btn-info':'info'==uibutton.style,
+              'btn-danger':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
+              'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" 
+        ng-click="exeCommand(uibutton,uitab)">
+            <i class="{{uibutton.icon}}"></i>{{uibutton.label}}
+      </button>
+    </span>
+  </div>
+</div>

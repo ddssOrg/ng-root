@@ -1,0 +1,7 @@
+<div class="l_project_tab1" style="position:fixed;margin: 0 auto 0 auto">
+  <ul id="tabs">
+      <li ng-repeat="uitab in uimodule.tabs" ng-if="$index==0||uitab.title=='综合分析意见'" ng-class="{'current':uimodule.tabActiveIndex==$index}">
+        <a href="javascript:;" ng-click="uimodule.tabActiveIndex=$index" ng-bind="$index<1?'指标分析意见':'综合分析意见'"></a>
+      </li>
+  </ul>
+</div>

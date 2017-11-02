@@ -1,7 +1,7 @@
 <div class="new_function_menu">
   <!-- ng-init="initDrag()" -->
   <div class="function_menu_list">
-    <div ng-repeat="uibutton in uimodule.toolbar.buttons" class="menu_list" ng-if="!(uibutton.action=='ztpj'&&isIe())">
+    <div ng-repeat="uibutton in uimodule.toolbar.buttons" class="menu_list" ng-if="uibutton.action!='ztpj'">
       <div class="function_icon" ng-class="{'function_icon_bg2':'info'==uibutton.style,
       'function_icon_bg1':'danger'==uibutton.style,'btn-primary':'primary'==uibutton.style,
       'btn-default':'default'==uibutton.style,'btn-warning':'warning'==uibutton.style}" ng-hotkey="regHotKey(uibutton)" ng-mouseenter="ui.index = $index"

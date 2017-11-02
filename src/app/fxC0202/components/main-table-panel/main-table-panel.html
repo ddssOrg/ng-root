@@ -1,0 +1,45 @@
+<div id="main_table_panel_{{::uitab.id}}" 
+  style="width:100%;overflow: auto;" 
+  ng-head-float="{{uitab.id}}"
+  scroll-header-title-id="app/fxC0202/components/tab-head/tab-head.html"
+  float-table-head="app/fxC0202/components/main-table-panel/components/table-head/table-head.html"
+  >
+  <div id="float_bar_top" ng-if="$index==0" class="nav-height" style="position:fixed;width:100%;top:0px;z-index:99">
+    <nav id="nav-box" class="nav-box">
+      <ul class="clearfix" style="float: left;">
+        <li ng-repeat="uitab in uimodule.tabs" ng-if="uitab.title!='综合分析意见'&&uitab.id.length<9">
+          <a class="md-tab" ng-class="{'active':ui.tabIndex==$index,'md-tab-right':uitab.title!='综合分析意见'}" ng-click="ui.tabIndex=$index;" app-archor="{{uitab.id}}">
+					  {{uitab.title}}
+          </a>
+        </li>
+        <li ng-repeat="uitab in uimodule.tabs" ng-if="uitab.title!='综合分析意见'&&uitab.id.length>9">
+          <a class="md-tab" ng-class="{'active':ui.tabIndex==$index,'md-tab-right':uitab.title!='综合分析意见'}" ng-click="ui.tabIndex=$index;"
+            app-archor="{{uitab.id}}">
+					  {{uitab.title}}结构比对
+							<span style="align: center;margin:0px 0px 0px 5px;" ng-if="ui.tabIndex&&ui.tabIndex==$index"
+												class="icon-remove" ng-click="deleteData(uitab.title, uitab.id, $index)"></span>
+							</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <div ng-style="{'margin-top': getTop()+'px !important'}">   
+    <div id="table_float_table_head_div_{{uitab.id}}" ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+      <fx-c0202-table-head></fx-c0202-table-head>
+    </div>
+    <div id="main_table_panel_body_{{uitab.id}}" class="main_table" ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}"
+      style="border-bottom: 1px solid #dddddd;overflow-y: hidden; overflow-x: hidden;">
+      <table id="main_table_{{uitab.id}}" ng-float-scroll="{{uitab.id}}" class="table_new_style table table-new-border" style="table-layout: fixed; margin-bottom: 0;position: relative;z-index: 1;"
+        ng-style="{'width':uitab.table.width?uitab.table.width+'px':'100%'}">
+        <thead>
+          <tr ng-repeat="uiheadrow in uitab.table.thead.headRows" style="height:0px">
+            <th ng-repeat="uiheadcell in uiheadrow.headCells" rowspan="{{uiheadcell.rowspan}}" colspan="{{uiheadcell.colspan}}" style="padding:0;border:0;"
+              ng-style="{'width':uiheadcell.width+'%'}">
+            </th>
+          </tr>
+        </thead>       
+      </table>
+    </div>
+  </div>
+</div>

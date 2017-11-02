@@ -37,11 +37,16 @@
       </div>
     </div>
   </div>
-  <div style="position: relative; top:10px;">
+  <div style="position: relative; top:51px;">
     <module-tabs></module-tabs>
-    <div id="content" ng-style="{'top': (anchorPointHeight(uimodule)-35) +'px'}">
-      <div id="{{uitab.id}}" style="position:relative;" class="sample-show-hide section-content xsj xsj1" ng-repeat="uitab in uimodule.tabs" ng-style="{'z-index':10-$index,'padding-top': anchorPointHeight(uimodule) +'px','margin-top': -1*anchorPointHeight(uimodule) +'px'}"
-        ng-show="(uitab.title=='综合分析意见'&&uimodule.tabActiveIndex==$index)||(uitab.title!='综合分析意见'&&uimodule.tabs[uimodule.tabActiveIndex].title!='综合分析意见')">
+    <div id="content" style="top:-8px;padding-left:33px;">
+      <div id="{{uitab.id}}"
+        class="sample-show-hide section-content xsj xsj1" 
+        ng-repeat="uitab in uimodule.tabs" 	
+        ng-style="{'margin-top': $index==0?'-61px':'-45px'}" 
+        style="padding-top:40px;"
+        ng-show="(uitab.title=='综合分析意见'&&uimodule.tabActiveIndex==$index)||(uitab.title!='综合分析意见'&&uimodule.tabs[uimodule.tabActiveIndex].title!='综合分析意见')" >
+
         <iframe style="width: 100%; border: 1px solid #ddd; margin-top: -43px;" ng-style="{'height':getPageOfficeHeight()+'px'}"
           frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" ng-src="{{uitab.iframeSrc}}"
           ng-if="uitab.type=='iframe' && uimodule.tabActiveIndex==$index || uitab.showed" ng-init="uitab.showed=true"></iframe>

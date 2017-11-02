@@ -121,7 +121,7 @@ angular.module('app.shared')
             panelBody = panelBody || $('#main_table_panel_body_' + tabId);
             clonePanel = panelBody.clone().attr('id', 'main_table_panel_body_copy_' + tabId);
             clonePanel.find('.float_scroll_bar').remove();
-            clonePanel.css({ 'position': 'absolute', 'width': getColWidth(), 'background-color': '#ffffff', 'top': panelBody.position().top });
+            clonePanel.css({ 'position': 'absolute', 'width': getColWidth(), 'background-color': '#ffffff', 'top': panelBody.position().top,'z-index':3 });
             clonePanel.find('input')
               .attr('disabled', 'disabled')
               .attr('tabindex', -1);
@@ -134,7 +134,7 @@ angular.module('app.shared')
               'width': getColWidth(),
               'background-color': '#ffffff',
               'top': panelHead.position().top,
-              'overflow': 'hidden',
+              'overflow': 'hidden'
             });
             clonePanelHead.find('input').remove();
             panelHead.after(clonePanelHead);
@@ -157,7 +157,7 @@ angular.module('app.shared')
 
           var panelHeight = panel.height();
           var floatTopHeight = floatBarTop.height();
-          var scroll_top = (document.body.scrollTop || document.documentElement.scrollTop) - element.offset().top + floatTopHeight + tabHead.height();//判断是否到达窗口顶部
+          var scroll_top = (document.body.scrollTop || document.documentElement.scrollTop) - element.offset().top + floatTopHeight + tabHead.height();//判断是否到达窗口顶部                    
           if (scroll_top > 0 && scroll_top < panelHeight) {
             if (scroll_header_title && scroll_header_title._isVisiable) return;
 
@@ -179,7 +179,7 @@ angular.module('app.shared')
 
               scroll_header = $($templateCache.get(attrs['floatTableHead']))
                 .attr('id', 'table_float_table_head_copy_' + tabId)//更改复制的表格id
-                .css({ zIndex: 2 });
+                .css({ zIndex: 2 });                
               scroll_fix_header = scroll_fix_header || $('<div></div>');
               scroll_fix_header.append(floatTableHeadClone);
 

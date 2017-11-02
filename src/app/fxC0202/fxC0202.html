@@ -1,0 +1,31 @@
+<div class="fx">
+  <!-- 快捷键保存时，用于获得焦点 -->
+  <input id="hidden_focus_hotKey" type="text" style="height:0px;size:0px" />
+  <function-menu ng-if="!((uibutton.action=='ztpj'||uibutton.action=='xmjzfx')&&isIe())"></function-menu>
+  <div ng-if="nodatas" style="position: absolute; top: 15px; left: 160px; z-index: 5;">
+    <span style="font-size: 15px; color: red;">请先录入财务合并报表</span>
+  </div>
+  <div class="success_tips">
+    <span id="prompt">{{uimodule.defaultPrompt}}</span>
+    <i class="icon-remove success_tips_close" onclick="$(this).parent().hide(300)"></i>
+  </div>
+  <div style="position: relative; top:51px;">
+    <fx-c0202-module-tabs></fx-c0202-module-tabs>
+    <div id="content" style="top:-8px;padding-left:33px">
+      <div id = "{{uitab.id}}" class="sample-show-hide section-content xsj xsj1" ng-repeat="uitab in uimodule.tabs" 
+	    		ng-if="(uitab.title=='综合分析意见'&&uimodule.tabActiveIndex==$index)||(uitab.title!='综合分析意见'&&uimodule.tabs[uimodule.tabActiveIndex].title!='综合分析意见')"
+	    		ng-style="{'margin-top': $index==0?'-61px':'-45px'}"
+	    		style = "padding-top:40px;">
+        <iframe style="width: 100%; border: 1px solid #ddd; margin-top: -43px;" ng-style="{'height':getPageOfficeHeight()+'px'}"
+          frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="no" allowtransparency="yes" ng-src="{{uitab.iframeSrc}}"
+          ng-if="uitab.type=='iframe' && uimodule.tabActiveIndex==$index || uitab.showed" ng-init="uitab.showed=true"></iframe>
+        <!-- table start -->        
+         <!-- 表头 -->    
+        <fx-c0202-tab-head ng-if="uitab.title!='综合分析意见'"></fx-c0202-tab-head>
+        <fx-c0202-main-table-panel ng-show="uitab.type=='table'"></fx-c0202-main-table-panel>  
+        <fx-sub-table ng-if="uitab.subTable"></fx-sub-table>
+      </div>
+    </div>
+  </div>
+  <fx-spinner ng-show="loading"></fx-spinner>
+</div>
