@@ -730,7 +730,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
           $scope.viewOneFile = function (fileuuid) {
             var url = "/ywpt/page/viewFILE.jsp?uuid=" + fileuuid;
             top.MainPage.closeTab("menu_ckwj");
-            window.top.MainPage.newTab('menu_ckwj', '查看', 'icon-home', url, true);
+            window.top.MainPage.newTab('menu_ckwj', '预览文件', 'icon-home', url, true);
           }
           var fjuuids = [];
           if (tab.subTable.tbody) {
@@ -886,6 +886,19 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
               }
             }
 
+            //自动生成附件的uuid
+            dialogScop.creatUUID = function () {
+              var s = [];
+              var hexDigits = "0123456789abcdef";
+              for (var i = 0; i < 32; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+              }
+              s[14] = "4";
+              s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);
+              var uuid = s.join("");
+              return uuid;
+            };
+
             //下载模板
             dialogScop.loadTemplate = function () {
               if (uimodule.template && uimodule.template != null) {
@@ -914,7 +927,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
 
             dialogScop.loadFile = function () {
               window.showMask();
-              cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {                
+              cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {
                 try {
                   pageScope.fjuuid = dialogScop.seluuid;
                   //dialogScop.files = data;
@@ -964,6 +977,56 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                 window.hideMask();
               });
               dialogScop.closeThisDialog(1);
+            }
+
+            dialogScop.editFileOnline = function () {
+              cwhbbbService.queryEditFileOnlineIndex({ fxbddm: cjbddm, xmid: window.top.xmid }, function (data) {
+                var index = data.index;
+                var needBbrqz = data.needBbrqz;
+                var filename = data.filename;
+                var uuid = dialogScop.creatUUID();
+                var showType = dialogScop.isQB ? 'QB' : 'JB';
+                var url = "/resources/pageoffice/editFileOnline.jsp?absolutePath=" + absolutePath + "&xmid=" + window.top.xmid + "&cjbddm=" + cjbddm + "&uuid=" + uuid + "&rydm=" + ryDm + "&index=" + index + "&needBbrqz=" + needBbrqz + '&showType=' + showType;
+                if (window.browser.versions.trident || window.browser.versions.webKit) {//IE或者360浏览器
+                  window.hideHeaderMask();
+                  window.top.MainPage.newTab(cjbddm + '_editFileOnline', cjbdmc + '在线采集数据', 'icon-home', url, true, [{
+                    func: function () {
+                      var param = arguments[0];
+                      dialogScop.closeThisDialog(1);
+                      dialogScop.seluuid = param.uuid;
+                      var start = param.start;
+                      cwhbbbService.queryHasUploadOnline({ uuid: dialogScop.seluuid, fxbddm: cjbddm, xmid: window.top.xmid, index: index }, function (data) {
+                        if (data.succ) {
+                          //							    					setPrompt('采集的数据已上传,名称为'+filename, true);
+                          window.confirm('提示', '采集的数据已上传,名称为' + filename + '请确认是否导入?', function () {
+                            dialogScop.clickLoadFile();
+                          });
+                        }
+                        var end = new Date().getTime();//结束时间
+                        console.log('已执行关闭Tab页的回调方法, 用时' + (end - start) + 'ms');
+                      }, function () {
+                        setPrompt('采集信息获取失败', false);
+                      });
+                    },
+                    param: {
+                      cjbddm: cjbddm,
+                      uuid: uuid,
+                    }
+                  }]);
+                }
+              }, function () {
+
+              });
+            }
+
+            dialogScop.clickLoadFile = function () {
+              if (window.changeflag == true) {
+                window.confirm('提示', '数据修改尚未保存,请确认是否覆盖已修改的内容?', function () {
+                  dialogScop.loadFile();
+                });
+              } else {
+                dialogScop.loadFile();
+              }
             }
           }]
         });
@@ -1029,13 +1092,13 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
   $scope.viewOneFile = function (fileuuid) {
     var url = "/ywpt/page/viewFILE.jsp?uuid=" + fileuuid;
     top.MainPage.closeTab("menu_ckwj");
-    window.top.MainPage.newTab('menu_ckwj', '查看', 'icon-home', url, true);
+    window.top.MainPage.newTab('menu_ckwj', '预览文件', 'icon-home', url, true);
   }
   //查看file
   $scope.viewFile = function (cjmxdm) {
     var url = "/ywpt/page/viewFILE.jsp?xmid=" + window.top.xmid + "&cjmxdm=" + cjmxdm;
     top.MainPage.closeTab("menu_ckwj");
-    window.top.MainPage.newTab('menu_ckwj', '查看', 'icon-home', url, true);
+    window.top.MainPage.newTab('menu_ckwj', '预览文件', 'icon-home', url, true);
   }
   //删除file
   $scope.delFile = function (cjmxdm, cell) {

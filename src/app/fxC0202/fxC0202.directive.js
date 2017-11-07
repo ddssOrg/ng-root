@@ -235,11 +235,11 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                                             }
                                         }
                                         if (!hasTab) {
-                                            $scope.uimodule.tabs.push(uidata.extend.tabs[i]);
+                                            $scope.uimodule.tabs.splice($scope.uimodule.tabs.length - 2, 0, uidata.extend.tabs[i]);
                                             if (uidata.datas.length <= 0) {
                                                 $scope.nodatas = true;
                                             } else {
-                                                fxC0202Service.setData($scope.uimodule.tabs[$scope.uimodule.tabs.length - 1], uidata, $scope);
+                                                fxC0202Service.setData($scope.uimodule.tabs[$scope.uimodule.tabs.length - 3], uidata, $scope);
                                             }
                                         }
                                     }
@@ -274,12 +274,12 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                                             break;
                                         }
                                     }
-                                    if (!hasTab) {
-                                        $scope.uimodule.tabs.push(uidata.extend.tabs[i]);
+                                    if (!hasTab) {                                        
+                                        $scope.uimodule.tabs.splice($scope.uimodule.tabs.length - 2, 0, uidata.extend.tabs[i]);
                                         if (uidata.datas.length <= 0) {
                                             $scope.nodatas = true;
                                         } else {
-                                            fxC0202Service.setData($scope.uimodule.tabs[$scope.uimodule.tabs.length - 1], uidata, $scope);
+                                            fxC0202Service.setData($scope.uimodule.tabs[$scope.uimodule.tabs.length - 3], uidata, $scope);
                                         }
                                     }
                                 }
@@ -302,11 +302,11 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                     return true;//continue
                 }
                 if (tab.table.tbody) {
-                    $(tab.table.tbody.rows).each(function (rowIndex, row) {                                       
+                    $(tab.table.tbody.rows).each(function (rowIndex, row) {
                         if (command.status) {
                             row.emptyRow = true;
                             $scope.emptyRowStatus = true;
-                            $(row.cells).each(function (cellIndex, cell) {                            
+                            $(row.cells).each(function (cellIndex, cell) {
                                 if (checkPropertys.indexOf(cell.property) >= 0
                                     && (isNotNull(cell.value) && cell.value != '---') && (!/^(0|0.0+)$/.test(cell.value))) {
                                     row.emptyRow = false;
@@ -390,7 +390,7 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                     }
                     cjbg.cjmxs = cjmxs;
                     //把头也塞里
-                    if (tab.table) {
+                    if (tab.table && (tab.id != 'C0202-3' && tab.id != 'C0203-3' && tab.id != 'C0204-3')) {
                         var title = [];
                         angular.forEach(tab.table.thead.headRows, function (hr) {
                             var hrv = [];
@@ -451,6 +451,136 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                 });
             } else {
                 saveaction();
+            }
+        } else if ('addFile' === command.action) {
+            var tab = arguments[1];
+            ngDialog.open({
+                showClose: false,
+                width: 1100,
+                template: 'app/fx/templates/file-select-dialog.html',
+                className: 'ngdialog-theme-plain',
+                controller: ['$scope', ($scope) => {
+                    $scope.viewOneFile = function (fileuuid) {
+                        var url = "/ywpt/page/viewFILE.jsp?uuid=" + fileuuid;
+                        top.MainPage.closeTab("menu_ckwj");
+                        window.top.MainPage.newTab('menu_ckwj', '预览文件', 'icon-home', url, true);
+                    }
+                    var fjuuids = [];
+                    if (tab.subTable.tbody) {
+                        angular.forEach(tab.subTable.tbody.rows, function (row) {
+                            fjuuids.push(row.id);
+                        });
+                    }
+                    var checkFj = function (fjuuid) {
+                        return fjuuids.indexOf(fjuuid) >= 0;
+                    }
+                    $scope.tabs = [{ cjbddms: ['10101', '10102'], files: [], loading: true },
+                    { cjbddms: ['10201', '10202'], files: [], loading: true },
+                    { cjbddms: ['10301', '10302'], files: [], loading: true },
+                    { cjbddms: ['10103'], files: [], loading: true }],
+                        { cjbddms: ['00102'], files: [], loading: true };
+                    angular.forEach($scope.tabs, function (tab) {
+                        cwhbbbgnzxService.queryXmFiles({ xmid: window.top.xmid, cjbddms: angular.toJson(tab.cjbddms) }, function (data) {
+                            tab.files = data;
+                            var lastCjmxflmc, lastZlmc, lastIndex1, lastIndex2, rowspan1 = 1, rowspan2 = 1;
+                            angular.forEach(tab.files, function (file, index) {
+                                file.checked = checkFj(file.uuid);
+                                file.rowspan = 1;
+                                file.cjmxflmcShow = true;
+                                file.cjmxmcShow = true;
+                                if (index == 0 || file.cjmxflmc != lastCjmxflmc) {
+                                    file.cjmxflmcShow = true;
+                                    file.cjmxmcShow = true;
+                                    lastIndex1 = index;
+                                    lastIndex2 = index;
+                                    lastCjmxflmc = file.cjmxflmc;
+                                    lastZlmc = file.cjmxmc;
+                                    rowspan1 = 1;
+                                    file.rowspan1 = 1;
+                                    rowspan2 = 1;
+                                    file.rowspan2 = 1;
+                                } else {
+                                    if (file.cjmxflmc == lastCjmxflmc) {
+                                        file.cjmxflmcShow = false;
+                                        tab.files[lastIndex1].rowspan1++;
+                                        if (file.cjmxmc == lastZlmc) {
+                                            file.cjmxmcShow = false;
+                                            tab.files[lastIndex2].rowspan2++;
+                                        } else {
+                                            lastIndex2 = index;
+                                            file.rowspan2 = 1;
+                                            lastZlmc = file.cjmxmc;
+                                            file.cjmxmcShow = true;
+                                        }
+                                    }
+                                }
+                            });
+                            tab.loading = false;
+                        }, function () {
+                            setPrompt('加载文件列表失败', false);
+                        });
+                    });
+                    $scope.hasCheckedFile = function () {
+                        var has = false;
+                        angular.forEach($scope.tabs, function (tab) {
+                            angular.forEach(tab.files, function (file) {
+                                if (file.checked) {
+                                    has = true;
+                                }
+                            });
+                        });
+                        return has;
+                    }
+                    $scope.selectedFile = function () {
+                        if (!tab.subTable.tbody) {
+                            tab.subTable.tbody = { rows: [] };
+                        }
+                        angular.forEach($scope.tabs, function (ftab) {
+                            angular.forEach(ftab.files, function (file) {
+                                if (file.checked) {
+                                    var has = false;
+                                    angular.forEach(tab.subTable.tbody.rows, function (row) {
+                                        if (row.id == file.uuid) {
+                                            has = true;
+                                        }
+                                    });
+                                    if (!has) {
+                                        var row = { id: file.uuid, cells: [] };
+                                        angular.forEach(tab.subTable.columns, function (cell) {
+                                            var newCell = angular.copy(cell);
+                                            newCell.value = file[newCell.property];
+                                            row.cells.push(newCell);
+                                        });
+                                        tab.subTable.tbody.rows.push(row);
+                                        window.changeflag = true;
+                                        window.closeFlag = true;
+                                    }
+                                }
+                            });
+                        });
+                        $scope.closeThisDialog(1);
+                    }
+                }]
+            });
+        } else if ('delFile' === command.action) {
+            var tab = arguments[1];
+            var selectedIndexs = [];
+            if (isNotNull(tab.subTable.tbody)) {
+                angular.forEach(tab.subTable.tbody.rows, function (row, index) {
+                    if (row.checked) {
+                        selectedIndexs.push(index);
+                    }
+                });
+            }
+            if (selectedIndexs.length <= 0) {
+                setPrompt('请选择要删除的附件', false);
+                return;
+            } else {
+                for (var i = selectedIndexs.length - 1; i >= 0; i--) {
+                    tab.subTable.tbody.rows.splice(selectedIndexs[i], 1);
+                }
+                window.changeflag = true;
+                window.closeFlag = true;
             }
         }
     }
@@ -616,6 +746,27 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                 }
             });
         });
+    }
+
+    //当前附件列表有无选中行
+    $scope.hasSelectedFjlbRow = function (tab) {
+        if (tab && tab.subTable && tab.subTable.tbody && tab.subTable.tbody.rows) {
+            var count = 0;
+            angular.forEach(tab.subTable.tbody.rows, function (row, rowIndex) {
+                if (row.checked) {
+                    count++;
+                }
+            });
+            return count;
+        } else {
+            return 0;
+        }
+    }
+
+    $scope.viewOneFile = function (fileuuid) {
+        var url = "/ywpt/page/viewFILE.jsp?uuid=" + fileuuid;
+        top.MainPage.closeTab("menu_ckwj");
+        window.top.MainPage.newTab('menu_ckwj', '预览文件', 'icon-home', url, true);
     }
 
 }

@@ -38,6 +38,12 @@ angular
       },
       refreshColumn: function (params, succ, err) {
         swordHttp.post(ctrl + '_refreshColumn', params, succ, err);
+      },
+      queryEditFileOnlineIndex: function (params, succ, err) {
+        swordHttp.post('FxGyCtrl_queryEditFileOnlineIndex', params, succ, err);
+      },
+      queryHasUploadOnline: function (params, succ, err) {
+        swordHttp.post('FxGyCtrl_queryHasUploadOnline', params, succ, err);
       }
     }
   }]);

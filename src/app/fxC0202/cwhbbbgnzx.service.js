@@ -19,6 +19,9 @@ angular
       },
       deleteData: function (params, succ, err) {
         swordHttp.post(ctrl + '_deleteData', params, succ, err);
+      },
+      queryXmFiles: function (params, succ, err) {
+        swordHttp.post('FxGyCtrl_queryXmFiles', params, succ, err);
       }
     }
   }]);

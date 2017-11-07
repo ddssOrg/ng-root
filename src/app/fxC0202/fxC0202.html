@@ -21,7 +21,7 @@
           ng-if="uitab.type=='iframe' && uimodule.tabActiveIndex==$index || uitab.showed" ng-init="uitab.showed=true"></iframe>
         <!-- table start -->        
          <!-- 表头 -->    
-        <fx-c0202-tab-head ng-if="uitab.title!='综合分析意见'"></fx-c0202-tab-head>
+        <fx-c0202-tab-head ng-if="uitab.title!='综合分析意见'&&uitab.title!='附件选择列表'"></fx-c0202-tab-head>
         <fx-c0202-main-table-panel ng-show="uitab.type=='table'"></fx-c0202-main-table-panel>  
         <fx-sub-table ng-if="uitab.subTable"></fx-sub-table>
       </div>

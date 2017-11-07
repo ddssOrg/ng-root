@@ -29,7 +29,7 @@ angular.module('fxC0202')
             if (uidata.templateName && uidata.templateName != null) {
                 $scope.uimodule.templateName = uidata.templateName;
                 //初始化上传组件
-                initUploadFile();
+                initUploadFile($scope);
             }
             if (tab.subTable && tab.subTable != null) {
                 //获取关联附件选择列表的表格代码

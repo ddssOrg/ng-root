@@ -342,7 +342,7 @@ function xmcjgyController ($timeout, $scope, xmcjgyService, swordHttp, ngDialog,
     } else if ('viewTzbgjh' === button.action) {
       var xmid = window.top.xmid;
       var url = '/sword?ctrl=XmxjSyjhCtrl_edit' + '&xmid=' + xmid;
-      window.top.MainPage.newTab('update_new_syjh' + xmid, '投资并购机会管理', 'icon-home', url);
+      window.top.MainPage.newTab('update_new_syjh' + xmid, '项目投资机会管理', 'icon-home', url);
     } else if ('search' === button.action) {
       slidingSearch();
     } else if ('gssearch' === button.action) {
