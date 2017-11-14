@@ -322,11 +322,12 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     } else if ('viewCjmx' === button.action) {
       var viewCjmxUrl = '/sword?ctrl=XmXmcjmxglCtrl_initReadPage';
       window.top.MainPage.newTab('viewCjmx', '采集模型查看', 'icon-home', viewCjmxUrl, true);
-    } else if ('save' === button.action) {
+    } else if ('save' === button.action) {     
       if (window.changeflag == false) {
         setPrompt('没有修改，无需保存', true);
         return;
       }
+      statisticEvent({category: cjbdmc, action: button.label});
       var param = { xmid: window.top.xmid, cjbddm: $scope.cjbddm, fjuuid: $scope.fjuuid, isQB: $scope.isQB + '' };
       var cjbgs = [];
       if ($scope.uimodule.label) {
@@ -509,9 +510,10 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       }
       saveaction();
       //$(window).unbind('scroll');
-    } else if ('switchEmptyRow' == button.action) {
+    } else if ('switchEmptyRow' == button.action) {     
+      statisticEvent({category: cjbdmc, action: button.label});
       button.status = !button.status;
-      button.label = button.status ? button.labelOn : button.labelOff;
+      button.label = button.status ? button.labelOn : button.labelOff;      
       $($scope.uimodule.tabs).each(function (tabIndex, tab) {
         var checkPropertys = button.extend[tab.id];
         if (!checkPropertys) {
@@ -850,6 +852,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         window.closeFlag = true;
       }
     } else if ('loadFile' === button.action) {
+      statisticEvent({category: cjbdmc, action: button.label});
       var uimodule = $scope.uimodule;
       var pageScope = $scope;
       window.showMask();
@@ -992,13 +995,13 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                   window.top.MainPage.newTab(cjbddm + '_editFileOnline', cjbdmc + '在线采集数据', 'icon-home', url, true, [{
                     func: function () {
                       var param = arguments[0];
-                      dialogScop.closeThisDialog(1);
                       dialogScop.seluuid = param.uuid;
                       var start = param.start;
                       cwhbbbService.queryHasUploadOnline({ uuid: dialogScop.seluuid, fxbddm: cjbddm, xmid: window.top.xmid, index: index }, function (data) {
                         if (data.succ) {
                           //							    					setPrompt('采集的数据已上传,名称为'+filename, true);
                           window.confirm('提示', '采集的数据已上传,名称为' + filename + '请确认是否导入?', function () {
+                            dialogScop.closeThisDialog();
                             dialogScop.clickLoadFile();
                           });
                         }
@@ -1063,6 +1066,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         });
       }
     } else if ('switchShowType' === button.action) {
+      statisticEvent({category: cjbdmc, action: button.label});
       fxService.buildGlobeEmptyRow($scope);
       //切换展示版本
       if (!button.status) {
