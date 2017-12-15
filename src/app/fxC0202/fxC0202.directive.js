@@ -23,12 +23,6 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
         tabIndex: 0,
         Index: 0,
     };
-    $scope.selectedTableFilter = function (table, filter) {
-        if (table.filterChoose == filter) {
-            return;
-        }
-        table.filterChoose = filter;
-    }
 
     //判断是否ie
     $scope.isIe = function () {
@@ -95,6 +89,27 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
         });
     }
     //初始化数据
+    // var initData = function () {
+    //     $scope.loadMsg = "数据加载中...";
+    //     var winWidth;
+    //     if (window.innerWidth) {
+    //         winWidth = window.innerWidth;
+    //     } else if ((document.body) && (document.body.clientWidth)) {
+    //         winWidth = document.body.clientWidth;
+    //     }
+    //     //遍历tab，分别加载各自的table数据
+    //     angular.forEach($scope.uimodule.tabs, function (tab) {
+    //         $scope.loading++;
+    //         var param = { xmid: xmid, cjbddm: cjbddm, cjbgdm: tab.id, winWidth: winWidth + '' };
+    //         cwhbbbgnzxService.loadData(param, function (uidata) {
+    //             if (isNotNull(uidata.datas) && uidata.datas.length <= 0) {
+    //                 $scope.nodatas = true;
+    //             }
+    //             fxC0202Service.setData(tab, uidata, $scope);
+    //         });
+    //     });
+
+
     var initData = function () {
         $scope.loadMsg = "数据加载中...";
         var winWidth;
@@ -104,17 +119,22 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
             winWidth = document.body.clientWidth;
         }
         //遍历tab，分别加载各自的table数据
-        angular.forEach($scope.uimodule.tabs, function (tab) {
-            $scope.loading++;
-            var param = { xmid: xmid, cjbddm: cjbddm, cjbgdm: tab.id, winWidth: winWidth + '' };
-            cwhbbbgnzxService.loadData(param, function (uidata) {
-                if (isNotNull(uidata.datas) && uidata.datas.length <= 0) {
-                    $scope.nodatas = true;
-                }
-                fxC0202Service.setData(tab, uidata, $scope);
+        var param = { xmid: xmid, cjbddm: cjbddm, tabs: angular.toJson($scope.uimodule.tabs), winWidth: winWidth + '' };
+        cwhbbbgnzxService.loadAllData(param, function (uidatas) {
+            angular.forEach($scope.uimodule.tabs, function (tab) {
+                angular.forEach(uidatas, function (uidata) {
+                    if (tab.id == uidata.id) {
+                        if (isNotNull(uidata.datas) && uidata.datas.length <= 0) {
+                            $scope.nodatas = true;
+                        }
+                        fxC0202Service.setData(tab, uidata, $scope);
+                        return false;
+                    }
+                });
             });
         });
     }
+
     initUI();
     //公共
     //初始化上传附件插件
@@ -274,7 +294,7 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                                             break;
                                         }
                                     }
-                                    if (!hasTab) {                                        
+                                    if (!hasTab) {
                                         $scope.uimodule.tabs.splice($scope.uimodule.tabs.length - 2, 0, uidata.extend.tabs[i]);
                                         if (uidata.datas.length <= 0) {
                                             $scope.nodatas = true;

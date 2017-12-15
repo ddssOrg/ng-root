@@ -99,6 +99,33 @@
       border-radius: 4px;
       color: white;
   }
+  .ym-box .title {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border-bottom: 1px solid rgba(54,158,221,0.4);
+  }
+
+  .ym-box .zlsqYear {
+    font-size: 16px;
+    text-align: center;
+  }
+
+  .ym-box .zlsqYear span {
+    width: 55px;
+    margin: 3px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+    float:left;
+  }
+
+  .ym-box .zlsqYear span:HOVER {
+    background-color: #10b3ce;
+    border-radius: 4px;
+    color: white;
+  }
+
   .font-bold-row{
     font-weight: bold;
   } 

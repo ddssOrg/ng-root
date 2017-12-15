@@ -1,17 +1,11 @@
-<div id="main_table_panel_{{::uitab.id}}" 
-  class="table-frame fx-main-table-panel" 
-  ng-head-float="{{uitab.id}}"
-  scroll-header-title-id="app/fx/components/tab-head/tab-head.html"
-  float-table-head="app/fx/components/main-table-panel/components/table-head/table-head.html"
-  style="overflow-x: auto; width: 100%;">
+<div id="main_table_panel_{{::uitab.id}}" class="table-frame fx-main-table-panel" ng-head-float="{{uitab.id}}" scroll-header-title-id="app/fx/components/tab-head/tab-head.html"
+  float-table-head="app/fx/components/main-table-panel/components/table-head/table-head.html" style="overflow-x: auto; width: 100%;">
   <!-- 表头 start -->
   <div id="float_bar_top" ng-if="$index==0" class="nav-height" style="position:fixed;width:97%;top:0px;z-index:99">
     <nav id="nav-box" class="nav-box">
       <ul class="clearfix" style="width: 50%;float: left;">
         <li ng-repeat="uitab in uimodule.tabs" ng-if="uitab.title!='综合分析意见'">
-          <a class="md-tab" 
-            ng-class="{'active':ui.tabIndex==$index,'md-tab-right':uitab.title!='综合分析意见'}" 
-            ng-click="ui.tabIndex=$index;"
+          <a class="md-tab" ng-class="{'active':ui.tabIndex==$index,'md-tab-right':uitab.title!='综合分析意见'}" ng-click="ui.tabIndex=$index;"
             app-archor="{{uitab.id}}">
               {{uitab.title}}
           </a>
@@ -29,25 +23,22 @@
             <img id="addsqsrk" style="width: 18px; margin-top: -3px; cursor: pointer;" src="/css/css/images/icon_riqi.png" ng-click="addsqsrk()"
             />
             <div id="ymbox" class="ym-box" style="display: none;z-index: 5;">
-              <div id="ymbox_year" class="year">
-                <i id="ymbox_year_sub" class="icon-angle-left left"></i>
-                <span id="ymbox_year_center" class="center"></span>
-                <i id="ymbox_year_add" class="icon-angle-right right"></i>
+              <div id="ymbox_title" class="title">
+                <span id="ymbox_title_center" class="center"></span>
               </div>
-              <div id="ymbox_month" class="month">
-                <span month="01">一月</span><span month="02">二月</span><span month="03">三月</span> <span month="04">四月</span>
-                <span month="05">五月</span><span month="06">六月</span> <span month="07">七月</span><span month="08">八月</span>
-                <span month="09">九月</span> <span month="10">十月</span><span month="11">十一月</span><span month="12">十二月</span>
+              <div id="ymbox_zlsqYear" class="zlsqYear" ng-repeat="sq in zlsq">
+                <span zlsqYear="{{sq}}">{{sq}}</span>
               </div>
             </div>
+
           </div>
           <div style="width: 78%;height: 100%;float: left;margin-left: 0px;">
             <ul class="clearfix" style="width: 60%;float: left;width: 100%;float: left;margin-top: -7px;margin-left: -20px;padding-top: 0px;">
               <li ng-repeat="time in times">
-                <a class="md-tab" style="font-size: 14px;" ng-class="{'active':checkedTime.substring(0, 7)==time}" ng-click="selectedTime(time);">
+                <a class="md-tab" style="font-size: 14px;" ng-class="{'active':checkedTime.substring(0, 4)==time}" ng-click="selectedTime(time);">
                           {{time}}
 			                    <span style="align: center;margin:0px 0px 0px 5px;"
-															ng-if="time&&checkedTime.substring(0, 7)==time"
+															ng-if="time&&checkedTime.substring(0, 4)==time"
                               class="icon-remove" ng-click="deleteSqData(time)">
                           </span>
                           <span ng-if="$index%4==3"><br/></span>

@@ -28,7 +28,7 @@
       </div>
       <div class="ljw_table_date_detail">
         <div class="ljw_table_date_datail_up">
-          <span ng-class="{'ljw_table_date_choice':checkedTime==time,'ljw_table_date_un_choice':checkedTime!=time}" ng-repeat="time in times"
+          <span ng-class="{'ljw_table_date_choice':checkedTime.substring(0, 4)==time,'ljw_table_date_un_choice':checkedTime.substring(0, 4)!=time}" ng-repeat="time in times"
             ng-click="selectedTime(time)">{{time}}
                 		<span style="align: center;margin:0px 0px 0px 5px;"
 						class="icon-remove" ng-click="deleteSqData(time)"></span>

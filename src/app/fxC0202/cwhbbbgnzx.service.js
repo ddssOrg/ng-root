@@ -22,6 +22,10 @@ angular
       },
       queryXmFiles: function (params, succ, err) {
         swordHttp.post('FxGyCtrl_queryXmFiles', params, succ, err);
-      }
+      },
+      loadAllData: function (params, succ, err) {
+        //查询最新的已比对数据
+        swordHttp.post(ctrl + '_loadAllData', params, succ, err);
+      },
     }
   }]);

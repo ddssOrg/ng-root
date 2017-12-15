@@ -31,6 +31,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
   $scope.firstLoad = true;
   $scope.emptyRowStatus = false;
   $scope.glfjBgdm = '';
+  $scope.zlsq = null;
 
   //初始化UI
   var initUI = function () {
@@ -67,12 +68,6 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
   //执行配置的自定义脚本中的方法
   $scope.validetehbs = function (uitab) {
     validetehbsData(uitab, uitab.table.columns, uitab.table.tbody.rows, $scope.uimodule);
-  }
-  $scope.selectedTableFilter = function (table, filter) {
-    if (table.filterChoose == filter) {
-      return;
-    }
-    table.filterChoose = filter;
   }
   $scope.fxB0304_3_5 = {
     myCreateYear: ""
@@ -254,6 +249,10 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       var loadHBData = function (uidataList) {
         $scope.loading--;
         $.each(uidataList, function (index, uidata) {
+          if (uidata.zlsqList != null && $scope.zlsq == null) {
+            //初始化scope全局资料暑期
+            $scope.zlsq = uidata.zlsqList;
+          }
           fxService.buildGlobeShowType(uidata, $scope);
           var tabId = uidata.id;
           dataMap.put(tabId, uidata);
@@ -322,12 +321,12 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     } else if ('viewCjmx' === button.action) {
       var viewCjmxUrl = '/sword?ctrl=XmXmcjmxglCtrl_initReadPage';
       window.top.MainPage.newTab('viewCjmx', '采集模型查看', 'icon-home', viewCjmxUrl, true);
-    } else if ('save' === button.action) {     
+    } else if ('save' === button.action) {
       if (window.changeflag == false) {
         setPrompt('没有修改，无需保存', true);
         return;
       }
-      statisticEvent({category: cjbdmc, action: button.label});
+      statisticEvent({ category: cjbdmc, action: button.label });
       var param = { xmid: window.top.xmid, cjbddm: $scope.cjbddm, fjuuid: $scope.fjuuid, isQB: $scope.isQB + '' };
       var cjbgs = [];
       if ($scope.uimodule.label) {
@@ -496,6 +495,9 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
             window.changeflag = false;
             window.closeFlag = false;
             //initData();
+            if ($scope.uimodule.label && $scope.uimodule.label.value) {
+              $scope.checkedTime = $scope.uimodule.label.value.substring(0, 4);
+            }
             initTimes();
             window.isRunningCommand = false;
           } else {
@@ -510,10 +512,10 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       }
       saveaction();
       //$(window).unbind('scroll');
-    } else if ('switchEmptyRow' == button.action) {     
-      statisticEvent({category: cjbdmc, action: button.label});
+    } else if ('switchEmptyRow' == button.action) {
+      statisticEvent({ category: cjbdmc, action: button.label });
       button.status = !button.status;
-      button.label = button.status ? button.labelOn : button.labelOff;      
+      button.label = button.status ? button.labelOn : button.labelOff;
       $($scope.uimodule.tabs).each(function (tabIndex, tab) {
         var checkPropertys = button.extend[tab.id];
         if (!checkPropertys) {
@@ -852,7 +854,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         window.closeFlag = true;
       }
     } else if ('loadFile' === button.action) {
-      statisticEvent({category: cjbdmc, action: button.label});
+      statisticEvent({ category: cjbdmc, action: button.label });
       var uimodule = $scope.uimodule;
       var pageScope = $scope;
       window.showMask();
@@ -1066,7 +1068,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         });
       }
     } else if ('switchShowType' === button.action) {
-      statisticEvent({category: cjbdmc, action: button.label});
+      statisticEvent({ category: cjbdmc, action: button.label });
       fxService.buildGlobeEmptyRow($scope);
       //切换展示版本
       if (!button.status) {
@@ -1298,45 +1300,32 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
     window.closeFlag = true;
   }
   var caniclickthemonth = false;
-  var initYearMonthPicker = function () {
-    $('.ym-box>.year>.center').html($scope.uimodule.label.value ? $scope.uimodule.label.value.substring(0, 4) : new Date().getFullYear());
-    $('.ym-box>.year>.left').unbind();
-    $('.ym-box>.year>.left').click(function () {
-      var year = $('.ym-box>.year>.center').html();
-      $('.ym-box>.year>.center').html(parseInt(year) - 1);
-    });
-    $('.ym-box>.year>.right').unbind();
-    $('.ym-box>.year>.right').click(function () {
-      var year = $('.ym-box>.year>.center').html();
-      $('.ym-box>.year>.center').html(parseInt(year) + 1);
-    });
-    $('.ym-box>.month>span').unbind();
-    $('.ym-box>.month>span').click(function () {
-      if (caniclickthemonth) {
-        caniclickthemonth = false;
-        var y = $('.ym-box>.year>.center').html();
-        var m = $(this).attr('month');
-        if ($scope.times.indexOf(y + '-' + m) >= 0) {
-          setPrompt('所选属期已存在', false);
-          $scope.uimodule.label.value = y + '-' + m;
-          $scope.checkedTime = y + '-' + m
-          $('.ym-box').fadeOut(100);
-          $scope.loadZlsqData(y + '-' + m);
-        } else {
-          $scope.uimodule.label.value = y + '-' + m;
-          $scope.checkedTime = y + '-' + m
-          $('.ym-box').fadeOut(100);
-          $scope.loadZlsqData(y + '-' + m);
-        }
+  var initYearPicker = function () {
+    $('.ym-box>.title>.center').html("属期选择");
+    $('.ym-box>.zlsqYear>span').unbind();
+    $('.ym-box>.zlsqYear>span').click(function () {
+      caniclickthemonth = false;
+      var y = $(this).attr('zlsqYear');
+      if ($scope.times.indexOf(y) >= 0) {
+        setPrompt('所选属期已存在', false);
+        $scope.uimodule.label.value = y;
+        $scope.checkedTime = y;
+        $('.ym-box').fadeOut(200);
+        $scope.loadZlsqData(y);
+      } else {
+        $scope.uimodule.label.value = y;
+        $scope.checkedTime = y;
+        $('.ym-box').fadeOut(200);
+        $scope.loadZlsqData(y);
       }
     });
-    caniclickthemonth = true;
     if ($('.ym-box').is(":hidden")) {
       $('.ym-box').fadeIn(200);
     } else {
       $('.ym-box').fadeOut(200);
     }
   };
+
 
   //公共
   $scope.loadZlsqData = function (time) {
@@ -1604,10 +1593,10 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       window.confirm('提示', '本期数据尚未保存,是否保存?', function () {
         $scope.saveZlsqData();
       }, function () {
-        initYearMonthPicker();
+        initYearPicker();
       });
     } else {
-      initYearMonthPicker();
+      initYearPicker();
     }
   }
 
