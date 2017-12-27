@@ -137,69 +137,6 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
 
     initUI();
     //公共
-    //初始化上传附件插件
-    var initUploadFile = function (uidataId) {
-        $("#uploadFileTemplate").cssFileUpload({
-            url: '/ajax.sword?ctrl=DemoCtrl_uploadWdxmPic',
-            simple: false,
-            multiple: true,
-            template: $scope.uimodule.templateName ? $scope.uimodule.templateName.split("_")[0] : "",
-            data: { xmid: window.top.xmid, cjmxdm: $scope.uimodule.templateName ? $scope.uimodule.templateName.split("_")[1] : "" },
-            onBeforeSelectFile: function (selectFile) {
-                if ($scope.uimodule.label && $scope.uimodule.label.dataType == 'datetime' && isNull($scope.uimodule.label.value) && $scope.zlsqbg.indexOf($scope.glfjBgdm) >= 0) {
-                    $scope.sflrsqFlag = false;
-                    setPrompt('请选择资料属期', false);
-                    return;
-                }
-                selectFile();
-            },
-            add: function (e, data) {
-                //获取一次上传的文件数量
-                $scope.fileCount = data.files.length;
-            },
-            success: function (result, textStatus, jqXHR) {
-                if (result.succ == true) {
-                    var bbrqz = "";
-                    if ($scope.uimodule.label && $scope.uimodule.label.value) {
-                        bbrqz = $scope.uimodule.label.value;
-                    }
-                    $.ajax({
-                        url: '/ajax.sword?ctrl=ModifyXmfjGyCtrl_saveFxXmfjData',
-                        type: 'post',
-                        data: { xmid: window.top.xmid, cjmxdm: result.cjmxdm, cjbgdm: $scope.glfjBgdm, cjbddm: cjbddm, fileCount: $scope.fileCount, bbrqz: bbrqz },
-                        success: function (res) {
-                            angular.forEach($scope.uimodule.tabs, function (tab) {
-                                if (tab.id == $scope.glfjBgdm) {
-                                    var rows = [];
-                                    angular.forEach(res, function (rowdata, rowIndex, rowArr) {
-                                        var row = { rowIndex: rowIndex, cells: [] };
-                                        if (isNotNull(tab.subTable)) {
-                                            angular.forEach(tab.subTable.columns, function (column, colIndex, colArr) {
-                                                var value = rowdata[column.property];
-                                                var cell = angular.copy(column);
-                                                cell.colIndex = colIndex;
-                                                cell.value = value;
-                                                if (cell.dataType == 'id') {
-                                                    row.id = value;
-                                                }
-                                                row.cells[colIndex] = cell;
-                                            });
-                                            rows[rowIndex] = row;
-                                        }
-                                    });
-                                    if (isNotNull(tab.subTable)) {
-                                        $scope.$apply(function () {
-                                            tab.subTable.tbody = { rows: rows };
-                                        });
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
-            }
-        });
-    }
     $scope.exeCommand = function (command) {
         if ('exit' === command.action) {
             window.top.MainPage.closeTab();
@@ -602,6 +539,10 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
                 window.changeflag = true;
                 window.closeFlag = true;
             }
+        } if ('gotoHelp' === command.action) {
+            gotoHelp();
+        } else if ('gotoFeedback' === command.action) {
+            gotoFeedback();
         }
     }
 

@@ -302,7 +302,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       $scope.times = resp;
       if ($scope.times) {
         if (!$scope.checkedTime) {
-          $scope.checkedTime = $scope.times[0];
+          $scope.checkedTime = $scope.times[0].substring(0, 4);
         }
       }
     });
@@ -934,6 +934,11 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
               window.showMask();
               cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {
                 try {
+                  if(!data.succ){
+                    setPrompt(data.msg, false);
+                    window.hidemask();
+                    return;
+                  }
                   pageScope.fjuuid = dialogScop.seluuid;
                   //dialogScop.files = data;
                   var count = data.length;
@@ -961,7 +966,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                       window.closeFlag = true;
                     }
                   });
-                  var zlsq = moment(data[0].label).format('YYYY-MM');
+                  var zlsq = moment(data[0].label).format('YYYY');
                   if ($.inArray(zlsq, $scope.times) < 0) {
                     addTime(zlsq);
                     pageScope.checkedTime = zlsq;
@@ -991,7 +996,8 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                 var filename = data.filename;
                 var uuid = dialogScop.creatUUID();
                 var showType = dialogScop.isQB ? 'QB' : 'JB';
-                var url = "/resources/pageoffice/editFileOnline.jsp?absolutePath=" + absolutePath + "&xmid=" + window.top.xmid + "&cjbddm=" + cjbddm + "&uuid=" + uuid + "&rydm=" + ryDm + "&index=" + index + "&needBbrqz=" + needBbrqz + '&showType=' + showType;
+                var proZlsq = data.proZlsq;
+                var url = "/resources/pageoffice/editFileOnline.jsp?absolutePath=" + absolutePath + "&xmid=" + window.top.xmid + "&cjbddm=" + cjbddm + "&uuid=" + uuid + "&rydm=" + ryDm + "&index=" + index + "&needBbrqz=" + needBbrqz + '&showType=' + showType + "&proZlsq=" + proZlsq;
                 if (window.browser.versions.trident || window.browser.versions.webKit) {//IE或者360浏览器
                   window.hideHeaderMask();
                   window.top.MainPage.newTab(cjbddm + '_editFileOnline', cjbdmc + '在线采集数据', 'icon-home', url, true, [{
@@ -1059,8 +1065,8 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
               //作废成功回调
               if (data.success) {
                 setPrompt("作废当期数据成功", true);
-                $scope.uimodule.label.value = $scope.times.length > 0 ? $scope.times[0] : null;
-                $scope.checkedTime = $scope.times.length > 0 ? $scope.times[0] : null;
+                $scope.uimodule.label.value = $scope.times.length > 0 ? $scope.times[0].substring(0, 4) : null;
+                $scope.checkedTime = $scope.times.length > 0 ? $scope.times[0].substring(0, 4) : null;
                 $scope.loadZlsqData($scope.checkedTime);
               }
             }
@@ -1093,6 +1099,10 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
       //显示空科目
       window.changeflag = true;
       window.closeFlag = true;
+    } if ('gotoHelp' === button.action) {
+      gotoHelp();
+    } else if ('gotoFeedback' === button.action) {
+      gotoFeedback();
     }
   }
   $scope.viewOneFile = function (fileuuid) {
@@ -1187,8 +1197,8 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
             //作废成功回调
             if (data.success) {
               setPrompt("作废当期数据成功", true);
-              $scope.uimodule.label.value = $scope.times.length > 0 ? $scope.times[0] : null;
-              $scope.checkedTime = $scope.times.length > 0 ? $scope.times[0] : null;
+              $scope.uimodule.label.value = $scope.times.length > 0 ? $scope.times[0].substring(0, 4) : null;
+              $scope.checkedTime = $scope.times.length > 0 ? $scope.times[0].substring(0, 4) : null;
               $scope.loadZlsqData($scope.checkedTime);
               //							 alert("作废当期数据成功");
               //							 initData();
@@ -1560,7 +1570,7 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
         setPrompt('保存成功', true);
         window.changeflag = false;
         window.closeFlag = false;
-        $scope.uimodule.label.value = $scope.checkedTime;
+        $scope.uimodule.label.value = $scope.checkedTime.substring(0, 4);
         $scope.loadZlsqData($scope.uimodule.label.value);
         //刷新图标
         $($scope.uimodule.tabs).each(function (i, t) {

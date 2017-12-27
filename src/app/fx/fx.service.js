@@ -322,7 +322,7 @@ angular.module('fx')
         template: scope.uimodule.templateName ? scope.uimodule.templateName.split("_")[0] : "",
         data: { xmid: window.top.xmid, cjmxdm: scope.uimodule.templateName ? scope.uimodule.templateName.split("_")[1] : "" },
         onBeforeSelectFile: function (selectFile) {
-          if (scope.uimodule.label && scope.uimodule.label.dataType == 'datetime' && isNull(scope.uimodule.label.value)) {           
+          if (scope.uimodule.label && scope.uimodule.label.dataType == 'datetime' && isNull(scope.uimodule.label.value)) {
             setPrompt('请选择资料属期', false);
             return;
           }
@@ -342,32 +342,39 @@ angular.module('fx')
               url: '/ajax.sword?ctrl=ModifyXmfjGyCtrl_saveFxXmfjData',
               type: 'post',
               data: { xmid: window.top.xmid, cjmxdm: result.cjmxdm, cjbgdm: scope.glfjBgdm, cjbddm: cjbddm, fileCount: scope.fileCount, bbrqz: bbrqz },
-              success: function (res) {
-                angular.forEach(scope.uimodule.tabs, function (tab) {
-                  if (tab.id == scope.glfjBgdm) {
-                    var rows = [];
-                    angular.forEach(res, function (rowdata, rowIndex, rowArr) {
-                      var row = { rowIndex: rowIndex, cells: [] };
-                      if (isNotNull(tab.subTable)) {
-                        angular.forEach(tab.subTable.columns, function (column, colIndex, colArr) {
-                          var value = rowdata[column.property];
-                          var cell = angular.copy(column);
-                          cell.colIndex = colIndex;
-                          cell.value = value;
-                          if (cell.dataType == 'id') {
-                            row.id = value;
+              success: function (d) {
+                $.ajax({
+                  url: '/ajax.sword?ctrl=ModifyXmfjGyCtrl_queryFxFjsjData',
+                  type: 'post',
+                  data: { fxzbuuid: d.obj },
+                  success: function (res) {
+                    angular.forEach(scope.uimodule.tabs, function (tab) {
+                      if (tab.id == scope.glfjBgdm) {
+                        var rows = [];
+                        angular.forEach(res, function (rowdata, rowIndex, rowArr) {
+                          var row = { rowIndex: rowIndex, cells: [] };
+                          if (isNotNull(tab.subTable)) {
+                            angular.forEach(tab.subTable.columns, function (column, colIndex, colArr) {
+                              var value = rowdata[column.property];
+                              var cell = angular.copy(column);
+                              cell.colIndex = colIndex;
+                              cell.value = value;
+                              if (cell.dataType == 'id') {
+                                row.id = value;
+                              }
+                              row.cells[colIndex] = cell;
+                            });
+                            rows[rowIndex] = row;
                           }
-                          row.cells[colIndex] = cell;
                         });
-                        rows[rowIndex] = row;
+                        if (isNotNull(tab.subTable)) {
+                          scope.$apply(function () {
+                            tab.subTable.tbody = { rows: rows };
+                          });
+                        }
                       }
                     });
-                    if (isNotNull(tab.subTable)) {
-                      scope.$apply(function () {
-                        tab.subTable.tbody = { rows: rows };
-                      });
-                    }
-                  }
+                  },
                 });
               }
             });
