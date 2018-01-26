@@ -49,8 +49,7 @@ import {
 
 import {
   pasteHook,
-  calculationHook,
-  modificationHook
+  calculationHook
 } from '../../hooks';
 
 @ElementFactory({
@@ -80,7 +79,6 @@ export class UINumberFactory extends UIElementFactory {
    * @param  {} rowIndex
    */
   compile(input) {
-    
     let ele = input.cell.ele.children[0];
     // ele.value = input.cell.value || 0;
 
@@ -131,8 +129,6 @@ export class UINumberFactory extends UIElementFactory {
     ele.innerText = input.cell.value;
     if(input.cell.calculateAble){
       calculationHook(input, ele);
-    }    
-    
-    modificationHook(input, ele);
+    }
   }
 }

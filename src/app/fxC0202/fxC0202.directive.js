@@ -121,13 +121,13 @@ function cwhbbbgnzxFxController($timeout, $scope, cwhbbbgnzxService, swordHttp, 
         //遍历tab，分别加载各自的table数据
         var param = { xmid: xmid, cjbddm: cjbddm, tabs: angular.toJson($scope.uimodule.tabs), winWidth: winWidth + '' };
         cwhbbbgnzxService.loadAllData(param, function (uidatas) {
-            angular.forEach($scope.uimodule.tabs, function (tab) {
+            angular.forEach($scope.uimodule.tabs, function (tab,tabIndex) {
                 angular.forEach(uidatas, function (uidata) {
                     if (tab.id == uidata.id) {
-                        if (isNotNull(uidata.datas) && uidata.datas.length <= 0) {
+                        if (isNotNull(uidata.datas) && uidata.datas.length <= 0) {                            
                             $scope.nodatas = true;
                         }
-                        fxC0202Service.setData(tab, uidata, $scope);
+                        fxC0202Service.setData(tab, uidata, $scope,tabIndex);
                         return false;
                     }
                 });

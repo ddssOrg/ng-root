@@ -44,6 +44,9 @@ angular
       },
       queryHasUploadOnline: function (params, succ, err) {
         swordHttp.post('FxGyCtrl_queryHasUploadOnline', params, succ, err);
-      }
+      },
+      querySjxx: function (params, succ, err) {
+        swordHttp.post('FxC0202CwhbbbGnzx_querysjxx', params, succ, err);
+      },
     }
   }]);

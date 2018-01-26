@@ -176,14 +176,6 @@ export class UICell extends events.EventEmitter {
     return this._calculateAble;
   }
 
-  set bdAble(value) {
-    this._bdAble = value;
-  }
-
-  get bdAble() {
-    return this._bdAble;
-  }
-
   constructor(obj = {}, row, cellEle) {
     super();
     // this._ele = document.createElement('td');
@@ -214,7 +206,6 @@ export class UICell extends events.EventEmitter {
     this._editable = false;
     this._invalide = false;
     this._calculateAble = true;
-    this._bdAble = false;
   
     // not firing any event;
     Object.assign(this, obj, { _ele: cellEle });

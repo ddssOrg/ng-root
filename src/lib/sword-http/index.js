@@ -146,7 +146,7 @@ angular.module('ngSwordHttp', [])
               }
             }
 		    	
-          }).catch(({ data, status, headers, config }) => {
+          }).catch(({ data, status, headers, config }) => {            
             if (error) {
               error(data);
             }

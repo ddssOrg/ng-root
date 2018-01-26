@@ -255,7 +255,9 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
           }
           fxService.buildGlobeShowType(uidata, $scope);
           var tabId = uidata.id;
-          dataMap.put(tabId, uidata);
+          if (tabId) {
+            dataMap.put(tabId, uidata);
+          }
           var tab = tabMap.get(tabId);
           fxService.setData($scope.uimodule, tab, uidata, $scope);
           if (uidata.extend != null && uidata.extend.checked) {
@@ -932,11 +934,11 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
 
             dialogScop.loadFile = function () {
               window.showMask();
-              cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {
+              cwhbbbService.loadFile({ xmid: window.top.xmid, cjbddm: cjbddm, fileUuid: dialogScop.seluuid }, function (data) {                
                 try {
-                  if(!data.succ){
+                  if (data.succ != null && data.succ != undefined && (data.succ == false || data.succ == 'false')) {
                     setPrompt(data.msg, false);
-                    window.hidemask();
+                    window.hideMask();
                     return;
                   }
                   pageScope.fjuuid = dialogScop.seluuid;
@@ -974,7 +976,6 @@ function cwhbbbFxController($timeout, $scope, cwhbbbService, swordHttp, ngDialog
                     pageScope.checkedTime = zlsq;
                   }
                 } catch (e) {
-                  debugger;
                   console.log('execute error:' + e.lineNumber + ',' + e);
                 }
                 window.hideMask();

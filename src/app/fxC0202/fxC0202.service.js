@@ -4,7 +4,7 @@ import { modificationHook } from '../../shared/hooks/modification.js';
 angular.module('fxC0202')
     .service('fxC0202Service', ['$timeout', '$filter', 'CellCompilePoolService', function ($timeout, $filter, CellCompilePoolService) {
 
-        function setData(tab, uidata, $scope) {
+        function setData(tab, uidata, $scope, tabIndex) {
             //tableWidth
             if (uidata.tableWidth) {
                 tab.table.width = uidata.tableWidth
@@ -110,10 +110,8 @@ angular.module('fxC0202')
                                 }
                             }
                         }
-                        //row.cells[colIndex] = cell;
                         return cell;
                     });
-                    //rows[rowIndex] = row;
                     if (isNotNull(tab.table) && isNotNull(tab.table.filters)) {
                         tab.table.filters.sort(function (a, b) { return b - a })
                     }
@@ -135,12 +133,12 @@ angular.module('fxC0202')
 
             if (tab.table && tab.table.tbody) {
                 $timeout(() => {
-                    renderTable(tab, tab.table.tbody, $scope, $scope.uimodule);
+                    renderTable(tab, tab.table.tbody, $scope, $scope.uimodule,tabIndex);
                 });
             }
         }
 
-        function renderTable(uitab, tbody, scope, uimodule) {
+        function renderTable(uitab, tbody, scope, uimodule,tabIndex) {
             tbody.append(`#main_table_${uitab.id}`);
             var index = 0;
             tbody.rows.forEach((row, rowIndex) => {
@@ -166,9 +164,12 @@ angular.module('fxC0202')
                                     }
                                 });
                             }
+                        }else{
+                            const input = { row, cell, uitab, colIndex, rowIndex, tbody, scope, tabIndex };
+                            const ele = cell.ele.children[0];
+                            modificationHook(input, ele);
                         }
-                        cell.calculateAble = false;
-                        cell.bdAble = true;
+                        cell.calculateAble = false;                        
                         cell.postBuild();
                         resolve();
                     });
@@ -176,9 +177,9 @@ angular.module('fxC0202')
                 });
             });
             CellCompilePoolService.startCompile(40).then(() => {
-                // init all data after load table finished.
                 tbody.rows.forEach((row, rowIndex) => {
                     row.cells.forEach((cell, colIndex) => {
+                        console.log(cell.dataType);
                         if (cell.dataType === 'number') {
                             scope.numberInit(cell);
                         }
@@ -218,7 +219,7 @@ angular.module('fxC0202')
                                     }
                                 });
                             }
-                        }
+                        }                        
                     });
                 }
             });

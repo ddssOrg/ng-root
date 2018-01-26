@@ -2,11 +2,6 @@
 export function modificationHook(input, ele) {
     var cell = input.cell;
     var row = input.row;
-
-    if (!cell.bdAble) {
-        return;
-    }
-
     var dbDom = $('<span></span>');
     if (cell.property == 'bqbsqbdbl' && row.data.bdezk == '0') {
         dbDom.append('<b class="ljw_table_important" style="cursor:default;">显著</b>');
